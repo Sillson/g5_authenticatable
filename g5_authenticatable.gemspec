@@ -23,4 +23,8 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'rails', '~> 3.2.15'
 
   spec.add_development_dependency 'sqlite3'
+
+  spec.add_development_dependency 'rspec-rails', '~> 2.14'
+  spec.add_development_dependency 'capybara'
+  spec.add_development_dependency 'factory_girl_rails'
 end
