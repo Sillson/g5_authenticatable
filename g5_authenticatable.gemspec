@@ -29,4 +29,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'capybara'
   spec.add_development_dependency 'factory_girl_rails'
   spec.add_development_dependency 'pry'
+  spec.add_development_dependency 'simplecov'
+  spec.add_development_dependency 'codeclimate-test-reporter'
 end
