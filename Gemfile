@@ -6,8 +6,23 @@ source "https://#{ENV['GEMFURY_TOKEN']}@gem.fury.io/me/"
 # development dependencies will be added by default to the :development group.
 gemspec
 
-# jquery-rails is used by the dummy application
+# Gems used by the dummy application
+gem 'rails', '~> 3.2.15'
 gem 'jquery-rails'
+gem 'sqlite3'
+
+group :test do
+  gem 'capybara'
+  gem 'factory_girl_rails'
+  gem 'simplecov'
+  gem 'codeclimate-test-reporter'
+  gem 'webmock'
+end
+
+group :test, :development do
+  gem 'rspec-rails', '~> 2.14'
+  gem 'pry'
+end
 
 # Declare any dependencies that are still in development here instead of in
 # your gemspec. These might include edge Rails or gems from your path or
