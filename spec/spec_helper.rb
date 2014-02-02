@@ -11,6 +11,7 @@ require File.expand_path("../dummy/config/environment", __FILE__)
 require 'rspec/rails'
 require 'rspec/autorun'
 require 'capybara/rspec'
+require 'webmock/rspec'
 
 Rails.backtrace_cleaner.remove_silencers!
 
@@ -43,4 +44,6 @@ RSpec.configure do |config|
   # the seed, which is printed after each run.
   #     --seed 1234
   config.order = 'random'
+
+  config.after(:suite) { WebMock.disable! }
 end
