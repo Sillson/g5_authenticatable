@@ -5,6 +5,7 @@ class DeviseCreateG5AuthenticatableUsers < ActiveRecord::Migration
       t.string :email,              :null => false, :default => ""
       t.string :provider,           :null => false, :default => "G5"
       t.string :uid,                :null => false
+      t.string :g5_access_token
 
       ## Rememberable
       # t.datetime :remember_created_at
