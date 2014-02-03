@@ -11,17 +11,17 @@ gem 'rails', '~> 3.2.15'
 gem 'jquery-rails'
 gem 'sqlite3'
 
-group :test do
-  gem 'capybara'
-  gem 'factory_girl_rails'
-  gem 'simplecov'
-  gem 'codeclimate-test-reporter'
-  gem 'webmock'
-end
-
 group :test, :development do
   gem 'rspec-rails', '~> 2.14'
   gem 'pry'
+end
+
+group :test do
+  gem 'capybara'
+  gem 'factory_girl_rails', '~> 4.3', require: false
+  gem 'simplecov', require: false
+  gem 'codeclimate-test-reporter', require: false
+  gem 'webmock'
 end
 
 # Declare any dependencies that are still in development here instead of in
