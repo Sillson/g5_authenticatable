@@ -1,7 +1,7 @@
 require 'spec_helper'
 
-module G5Authenticatable
-  describe User do
-    pending "add some examples to (or delete) #{__FILE__}"
-  end
+describe G5Authenticatable::User do
+  it { should allow_mass_assignment_of(:email) }
+  it { should allow_mass_assignment_of(:provider) }
+  it { should allow_mass_assignment_of(:uid) }
 end
