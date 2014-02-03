@@ -22,6 +22,7 @@ group :test do
   gem 'simplecov', require: false
   gem 'codeclimate-test-reporter', require: false
   gem 'webmock'
+  gem 'shoulda-matchers'
 end
 
 # Declare any dependencies that are still in development here instead of in
