@@ -1,9 +1,9 @@
 require 'spec_helper'
 
 describe 'Signing in' do
-  let(:user) { create(:user) }
+  let(:user) { create(:g5_authenticatable_user) }
 
-  before { visit_path_and_login_with(new_user_session_path, user) }
+  before { visit_path_and_login_with(g5_authenticatable.new_user_session_path, user) }
 
   it 'should sign in the user successfully' do
     expect(page).to have_content('Signed in successfully.')
