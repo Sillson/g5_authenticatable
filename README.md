@@ -81,6 +81,39 @@ Some setup you must do manually if you haven't yet:
     rails g devise:views
     ```
 
+### Registering your OAuth application
+
+1. Visit the auth server admin console:
+  * For development, visit https://dev-auth.g5search.com/admin
+  * For production, visit https://auth.g5search.com/admin
+2. Login as the default admin (for credentials, see
+   Brian Ricker or Chris Kraybill).
+3. Click "New Application"
+4. Enter a name that recognizably identifies your application.
+5. Enter the redirect URI where the auth server should redirect
+   after the user successfully authenticates. It will generally be
+   of the form `http://<apphost>/<devise_path>/auth/g5/callback`.
+
+   For non-production environments, this redirect URI does not have to
+   be publicly accessible, but it must be accessible from the browser
+   where you will be testing (so using something like
+   http://localhost:3000/users/auth/g5/callback is fine if your browser
+   and client application server are both local).
+6. For a trusted G5 application, check the "Auto-authorize?" checkbox. This
+   skips the OAuth authorization step where the user is prompted to explicitly
+   authorize the client application to access the user's data.
+7. Click "Submit" to obtain the client application's credentials.
+
+### Environment variables
+
+Once you have your OAuth 2.0 credentials, you'll need to set the following
+environment variables for your client application:
+
+* `G5_AUTH_CLIENT_ID` - the OAuth 2.0 application ID from the auth server
+* `G5_AUTH_CLIENT_SECRET` - the OAuth 2.0 application secret from the auth server
+* `G5_AUTH_REDIRECT_URI` - the OAuth 2.0 redirect URI registered with the auth server
+* `G5_AUTH_ENDPOINT` - the endpoint URL for the G5 auth server
+
 ## Examples
 
 TODO: Write examples here
