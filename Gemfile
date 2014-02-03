@@ -30,7 +30,7 @@ end
 # Git. Remember to move these dependencies to your gemspec before releasing
 # your gem to rubygems.org.
 gem 'devise_g5_authenticatable', git: 'git@github.com:g5search/devise_g5_authenticatable.git',
-                                 branch: 'engine_tasks'
+                                 branch: 'use_namespaced_route_helpers'
 
 # To use debugger
 # gem 'debugger'
