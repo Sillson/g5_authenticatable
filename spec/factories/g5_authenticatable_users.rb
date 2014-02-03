@@ -5,5 +5,6 @@ FactoryGirl.define do
     sequence(:email) { |n| "test.user#{n}@test.host" }
     provider 'g5'
     sequence(:uid) { |n| "abc123-#{n}" }
+    password 'test_secret'
   end
 end
