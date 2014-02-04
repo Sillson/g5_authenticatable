@@ -28,5 +28,6 @@ ActiveRecord::Schema.define(:version => 20140203020903) do
   end
 
   add_index "g5_authenticatable_users", ["email"], :name => "index_g5_authenticatable_users_on_email", :unique => true
+  add_index "g5_authenticatable_users", ["provider", "uid"], :name => "index_g5_authenticatable_users_on_provider_and_uid", :unique => true
 
 end

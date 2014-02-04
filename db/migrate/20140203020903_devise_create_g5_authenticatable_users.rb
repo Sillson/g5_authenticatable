@@ -18,5 +18,6 @@ class DeviseCreateG5AuthenticatableUsers < ActiveRecord::Migration
     end
 
     add_index :g5_authenticatable_users, :email, unique: true
+    add_index :g5_authenticatable_users, [:provider, :uid], unique: true
   end
 end
