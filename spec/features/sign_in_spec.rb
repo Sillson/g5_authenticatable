@@ -18,4 +18,18 @@ describe 'Signing in' do
       expect(current_path).to eq(root_path)
     end
   end
+
+  context 'when visiting a protected page' do
+    before do
+      visit_path_and_login_with(protected_page_path, user)
+    end
+
+    it 'should sign in the user successfully' do
+      expect(page).to have_content('Signed in successfully.')
+    end
+
+    it 'should redirect the user to the protected page' do
+      expect(current_path).to eq(protected_page_path)
+    end
+  end
 end
