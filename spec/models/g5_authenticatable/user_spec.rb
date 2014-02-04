@@ -1,7 +1,8 @@
 require 'spec_helper'
 
 describe G5Authenticatable::User do
-  let(:user) { described_class.new }
+  subject { user }
+  let(:user) { create(:g5_authenticatable_user) }
 
   it { should allow_mass_assignment_of(:email) }
   it { should allow_mass_assignment_of(:provider) }
@@ -18,4 +19,9 @@ describe G5Authenticatable::User do
   it 'should expose a method for updating tracked attributes' do
     expect(user).to respond_to(:update_tracked_fields!)
   end
+
+  it { should validate_presence_of(:email) }
+  it { should validate_uniqueness_of(:email) }
+  it { should_not validate_presence_of(:password) }
+  it { should validate_confirmation_of(:password) }
 end

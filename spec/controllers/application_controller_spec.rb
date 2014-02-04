@@ -1,10 +1,6 @@
 require 'spec_helper'
 
 describe ::ApplicationController do
-  xit 'should have the correct new_user_session_path' do
-    expect(controller.new_user_session_path).to eq('/g5_auth/users/sign_in')
-  end
-
   it 'should have the correct new_session_path for users' do
     expect(controller.new_session_path(:user)).to eq('/g5_auth/users/sign_in')
   end
