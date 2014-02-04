@@ -1,7 +1,14 @@
 # G5 Authenticatable
 
 G5 Authenticatable provides a default authentication solution for G5
-Rails applications.
+Rails applications. This gem configures and mounts 
+[devise](https://github.com/plataformatec/devise) with a default User
+model.
+
+If you are already using devise with your own model, this is not the
+library you are looking for. Consider using the
+[devise_g5_authenticatable](https://github.com/g5search/devise_g5_authenticatable)
+extension directly instead.
 
 ## Current Version
 
@@ -10,8 +17,6 @@ Rails applications.
 ## Requirements
 
 * [rails](https://github.com/rails/rails) >= 3.2
-* [devise](https://github.com/plataformatec/devise) ~> 3.1
-* [devise_g5_authenticatable](https://github.com/g5search/devise_g5_authenticatable)
 
 ## Installation
 
@@ -23,14 +28,20 @@ gem 'g5_authenticatable'
 
 And then execute:
 
-```bash
-$ bundle
+```console
+bundle
 ```
 
-Or install it yourself as:
+After you install the gem, you'll need to run the generator:
 
-```bash
-$ gem install g5_authenticatable
+```console
+rails generate g5_authenticatable
+```
+
+You'll also need to run a rake task to install the migrations:
+
+```console
+rake g5_authenticatable:install:migrations
 ```
 
 ## Usage
