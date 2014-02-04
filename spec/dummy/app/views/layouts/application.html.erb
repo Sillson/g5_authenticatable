@@ -9,7 +9,7 @@
 <body>
 <p class="notice"><%= notice %></p>
 <p class="alert"><%= alert %></p>
-<%= link_to('Login', g5_authenticatable.new_user_session_path) %>
+<%= link_to('Login', new_session_path(:user)) %>
 <%= yield %>
 
 </body>
