@@ -113,6 +113,7 @@ environment variables for your client application:
 * `G5_AUTH_CLIENT_SECRET` - the OAuth 2.0 application secret from the auth server
 * `G5_AUTH_REDIRECT_URI` - the OAuth 2.0 redirect URI registered with the auth server
 * `G5_AUTH_ENDPOINT` - the endpoint URL for the G5 auth server
+* `DEVISE_SECRET_KEY` - generate a unique secret key for your app using `rake secret`
 
 ## Examples
 
