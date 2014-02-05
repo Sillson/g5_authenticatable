@@ -66,8 +66,8 @@ root :to => 'home#index'
 3. Click "New Application"
 4. Enter a name that recognizably identifies your application.
 5. Enter the redirect URI where the auth server should redirect
-   after the user successfully authenticates. It will generally be
-   of the form `http://<apphost>/<devise_path>/auth/g5/callback`.
+   after the user successfully authenticates. It will be
+   of the form `http://<your_host>/g5_auth/users/auth/g5/callback`.
 
    For non-production environments, this redirect URI does not have to
    be publicly accessible, but it must be accessible from the browser
