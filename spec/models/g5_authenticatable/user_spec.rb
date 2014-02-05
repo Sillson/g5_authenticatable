@@ -23,4 +23,8 @@ describe G5Authenticatable::User do
   it { should validate_presence_of(:email) }
   it { should validate_uniqueness_of(:email) }
   it { should validate_uniqueness_of(:uid).scoped_to(:provider) }
+
+  it 'should support timeouts' do
+    expect(user.timeout_in).to be > 0
+  end
 end
