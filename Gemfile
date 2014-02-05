@@ -14,6 +14,7 @@ gem 'sqlite3'
 group :test, :development do
   gem 'rspec-rails', '~> 2.14'
   gem 'pry'
+  gem 'dotenv-rails'
 end
 
 group :test do
