@@ -2,8 +2,9 @@
 
 G5 Authenticatable provides a default authentication solution for G5
 Rails applications. This gem configures and mounts 
-[devise](https://github.com/plataformatec/devise) with a default User
-model.
+[Devise](https://github.com/plataformatec/devise) with a default User
+model, using [OmniAuth](https://github.com/intridea/omniauth) to authenticate
+to the G5 Auth server.
 
 If you are already using devise with your own model, this is not the
 library you are looking for. Consider using the
@@ -48,8 +49,8 @@ rake g5_authenticatable:install:migrations
 
 ### Root route
 
-Devise requires you to define a root route in your `config/routes.rb`.
-For example:
+Devise requires you to define a root route in your application's
+`config/routes.rb`. For example:
 
 ```ruby
 root :to => 'home#index'
@@ -89,9 +90,118 @@ environment variables for your client application:
 * `G5_AUTH_ENDPOINT` - the endpoint URL for the G5 auth server
 * `DEVISE_SECRET_KEY` - generate a unique secret key for your app using `rake secret`
 
+## Usage
+
+### Controller filters and helpers
+
+G5 Authenticatable installs all of the usual devise controllers and helpers.
+To set up a controller that requires authentication, use this before_filter:
+
+```ruby
+before_filter :authenticate_user!
+```
+
+To verify if a user is signed in, use the following helper:
+
+```ruby
+user_signed_in?
+```
+
+To access the model instance for the currently signed-in user:
+
+```ruby
+current_user
+```
+
+To access scoped session storage:
+
+```ruby
+user_session
+```
+
+### Route helpers
+
+There are several generic helper methods for session and omniauth
+URLs. To sign in:
+
+```ruby
+new_session_path(:user)
+```
+
+To sign out:
+
+```ruby
+destroy_session_path(:user)
+```
+
+There are also generic helpers for the OmniAuth paths, though you
+are unlikely to ever use these directly. The OmniAuth entry point
+is mounted at:
+
+```ruby
+g5_authorize_path(:user)
+```
+
+And the OmniAuth callback is:
+
+```ruby
+g5_callback_path(:user)
+```
+
+You may be more familiar with Devise's generated scoped URL helpers.
+These are still available, but are isolated to the engine's namespace.
+For example:
+
+```ruby
+g5_authenticatable.new_user_session_path
+g5_authenticatable.destroy_user_session_path
+```
+
+### Access token
+
+When a user authenticates, their OAuth access token will be stored on
+the local user:
+
+```ruby
+current_user.g5_access_token
+```
+
+This is to support server-to-server API calls with G5 services that are
+protected by OAuth.
+
 ## Examples
 
-TODO: Write examples here
+### Protecting a particular controller action
+
+You can use all of the usual options to `before_filter` for more fine-grained
+control over where authentication is required. For example, to require
+authentication only to edit a resource while leaving all other actions
+unsecured:
+
+```ruby
+class MyResourcesController < ApplicationController
+  before_filter :authenticate_user!, only: [:edit, :update]
+
+  # ...
+end
+```
+
+### Adding a link to sign in
+
+In your view template, add the following:
+
+```html+erb
+<%= link_to('Login', new_session_path(:user)) %>
+```
+
+### Adding a link to sign out
+
+In order to sign out, the link must not only have the correct path,
+but must also use the DELETE HTTP method:
+
+```html+erb
+<%= link_to('Logout', destroy_session_path(:user), :method => :delete) %>
+```
 
 ## Authors
 
