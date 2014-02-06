@@ -1,8 +1,11 @@
 Description:
-    Explain the generator
+    Installs the g5_authenticatable engine
 
 Example:
-    rails generate install Thing
+    rails generate g5_authenticatable:install
 
     This will create:
-        what/will/it/create
+        db/migrate/create_g5_authenticatable_users.rb
+
+    This will modify:
+        config/routes.rb
