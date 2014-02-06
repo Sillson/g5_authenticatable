@@ -145,7 +145,7 @@ Devise.setup do |config|
   # ==> Configuration for :timeoutable
   # The time you want to timeout the user session without activity. After this
   # time the user will be asked for credentials again. Default is 30 minutes.
-  # config.timeout_in = 30.minutes
+  config.timeout_in = 1.hour
 
   # If true, expires auth token on session timeout.
   # config.expire_auth_token_on_timeout = false
@@ -249,8 +249,9 @@ Devise.setup do |config|
   #
   # The router that invoked `devise_for`, in the example above, would be:
   # config.router_name = :my_engine
-  #
+  config.router_name = :g5_authenticatable
+
   # When using omniauth, Devise cannot automatically set Omniauth path,
   # so you need to do it manually. For the users scope, it would be:
-  # config.omniauth_path_prefix = '/my_engine/users/auth'
+  config.omniauth_path_prefix = '/g5_auth/users/auth'
 end

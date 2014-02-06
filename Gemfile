@@ -23,14 +23,14 @@ group :test do
   gem 'simplecov', require: false
   gem 'codeclimate-test-reporter', require: false
   gem 'webmock'
+  gem 'shoulda-matchers'
+  gem 'generator_spec'
 end
 
 # Declare any dependencies that are still in development here instead of in
 # your gemspec. These might include edge Rails or gems from your path or
 # Git. Remember to move these dependencies to your gemspec before releasing
 # your gem to rubygems.org.
-gem 'devise_g5_authenticatable', git: 'git@github.com:g5search/devise_g5_authenticatable.git',
-                                 branch: 'engine_tasks'
 
 # To use debugger
 # gem 'debugger'
