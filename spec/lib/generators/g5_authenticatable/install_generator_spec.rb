@@ -15,7 +15,7 @@ describe G5Authenticatable::InstallGenerator, type: :generator do
     run_generator
   end
 
-  xit 'should copy the migration' do
+  it 'should copy the migration' do
     expect(destination_root).to have_structure {
       directory 'db' do
         directory 'migrate' do
