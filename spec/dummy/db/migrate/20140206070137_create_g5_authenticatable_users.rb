@@ -1,13 +1,13 @@
-class DeviseCreateG5AuthenticatableUsers < ActiveRecord::Migration
+class CreateG5AuthenticatableUsers < ActiveRecord::Migration
   def change
     create_table(:g5_authenticatable_users) do |t|
-      ## G5 authenticatable
+      # G5 authenticatable
       t.string :email,              null: false, default: ''
       t.string :provider,           null: false, default: 'g5'
       t.string :uid,                null: false
       t.string :g5_access_token
 
-      ## Trackable
+      # Trackable
       t.integer  :sign_in_count, default: 0, null: false
       t.datetime :current_sign_in_at
       t.datetime :last_sign_in_at

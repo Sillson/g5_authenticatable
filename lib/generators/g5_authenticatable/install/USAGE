@@ -1,0 +1,11 @@
+Description:
+    Installs the g5_authenticatable engine
+
+Example:
+    rails generate g5_authenticatable:install
+
+    This will create:
+        db/migrate/create_g5_authenticatable_users.rb
+
+    This will modify:
+        config/routes.rb
