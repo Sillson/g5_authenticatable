@@ -7,7 +7,7 @@ source "https://#{ENV['GEMFURY_TOKEN']}@gem.fury.io/me/"
 gemspec
 
 # Gems used by the dummy application
-gem 'rails', '~> 3.2.15'
+gem 'rails', '~> 4.0.2'
 gem 'jquery-rails'
 gem 'sqlite3'
 

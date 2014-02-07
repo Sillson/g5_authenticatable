@@ -231,14 +231,14 @@ If you find bugs, have feature requests or questions, please
 Before running the specs for the first time, you will need to initialize the
 database for the test Rails application.
 
-```bash
-$ bundle exec rake app:db:setup
+```console
+$ RAILS_ENV=test bundle exec rake app:db:setup
 ```
 
 To execute the entire test suite:
 
-```bash
-$ bundle exec rake
+```console
+$ bundle exec rspec spec
 ```
 
 ## License
