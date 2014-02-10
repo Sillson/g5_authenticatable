@@ -33,7 +33,7 @@ describe 'Signing in' do
         })
       end
 
-      let(:uid) { '42' }
+      let(:uid) { 42 }
       let(:g5_access_token) { 'my secret token string' }
 
       it 'should sign in the user successfully' do

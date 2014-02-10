@@ -237,6 +237,7 @@ Before running the specs for the first time, you will need to initialize the
 database for the test Rails application.
 
 ```console
+$ cp spec/dummy/config/database.yml.sample spec/dummy/config/database.yml
 $ RAILS_ENV=test bundle exec rake app:db:setup
 ```
 
