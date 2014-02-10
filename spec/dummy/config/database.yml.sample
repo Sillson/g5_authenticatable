@@ -1,13 +1,13 @@
 development:
   adapter: postgresql
   encoding: unicode
-  database: dummy_development
+  database: g5_authenticatable_development
   pool: 5
   username: vagrant
 
 test:
   adapter: postgresql
   encoding: unicode
-  database: dummy_test
+  database: g5_authenticatable_test
   pool: 5
   username: vagrant
