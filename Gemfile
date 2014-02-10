@@ -9,7 +9,7 @@ gemspec
 # Gems used by the dummy application
 gem 'rails', '~> 4.0.2'
 gem 'jquery-rails'
-gem 'sqlite3'
+gem 'pg'
 
 group :test, :development do
   gem 'rspec-rails', '~> 2.14'
