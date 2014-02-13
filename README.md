@@ -171,7 +171,7 @@ g5_authenticatable.destroy_user_session_path
 
 ### Test Helpers ###
 
-When creating feature specs using RSpec, a user is available via let().
+When creating feature specs using RSpec, a user is available via let(:user).
 All requests within the context are authenticated as that user.
 
 ```ruby
