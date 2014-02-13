@@ -1,3 +1,7 @@
+#this allows the .env value to work
+require 'dotenv'
+Dotenv.load
+
 source 'https://rubygems.org'
 source "https://#{ENV['GEMFURY_TOKEN']}@gem.fury.io/me/"
 

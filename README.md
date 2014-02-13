@@ -169,6 +169,24 @@ g5_authenticatable.new_user_session_path
 g5_authenticatable.destroy_user_session_path
 ```
 
+### Test Helpers ###
+
+When creating feature specs using RSpec, a user is available via let(:user).
+All requests within the context are authenticated as that user.
+
+```ruby
+require 'authenticatable_test_helpers'
+
+context 'my context', :auth do
+
+  it 'can access some resource' do
+    visit('the place')
+    expect(page).to ...
+  end
+
+end
+```
+
 ### Access token
 
 When a user authenticates, their OAuth access token will be stored on
