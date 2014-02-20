@@ -14,6 +14,7 @@ gemspec
 gem 'rails', '~> 4.0.2'
 gem 'jquery-rails'
 gem 'pg'
+gem 'grape'
 
 group :test, :development do
   gem 'rspec-rails', '~> 2.14'
@@ -29,6 +30,7 @@ group :test do
   gem 'webmock'
   gem 'shoulda-matchers'
   gem 'generator_spec'
+  gem 'rspec-http', require: 'rspec/http'
 end
 
 # Declare any dependencies that are still in development here instead of in

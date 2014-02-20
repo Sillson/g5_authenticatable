@@ -30,7 +30,6 @@ FactoryGirl.define do
     provider 'g5'
     sequence(:uid) { |n| "abc123-#{n}" }
     sequence(:g5_access_token) { |n| "secret_token_#{n}" }
-    password 'test_secret'
   end
 end
 
