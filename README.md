@@ -4,12 +4,17 @@ G5 Authenticatable provides a default authentication solution for G5
 Rails applications. This gem configures and mounts 
 [Devise](https://github.com/plataformatec/devise) with a default User
 model, using [OmniAuth](https://github.com/intridea/omniauth) to authenticate
-to the G5 Auth server.
+to the G5 Auth server. Helpers are also provided to secure your API methods.
 
-If you are already using devise with your own model, this is not the
+If you are already using Devise with your own model, this is not the
 library you are looking for. Consider using the
 [devise_g5_authenticatable](https://github.com/g5search/devise_g5_authenticatable)
-extension directly instead.
+extension directly.
+
+If you have a stand-alone service without a UI, you may not need Devise at
+all. Consider using the
+[g5_authenticatable_api](https://github.com/g5search/g5_authenticatable_api)
+library in isolation.
 
 ## Current Version
 
@@ -169,6 +174,51 @@ g5_authenticatable.new_user_session_path
 g5_authenticatable.destroy_user_session_path
 ```
 
+### Access token ###
+
+When a user authenticates, their OAuth access token will be stored on
+the local user:
+
+```ruby
+current_user.g5_access_token
+```
+
+This is to support server-to-server API calls with G5 services that are
+protected by OAuth.
+
+### Securing a Grape API ###
+
+The API helpers are primarily intended to secure
+[Grape](https://github.com/intridea/grape) endpoints, but they are compatible
+with any Rack-based API implementation.
+
+If you include the `G5AuthenticatableApi::GrapeHelpers`, you can use the
+`authenticate_user!` method to protect your API actions:
+
+```ruby
+class MyApi < Grape::API
+  helpers G5AuthenticatableApi::GrapeHelpers
+
+  before { authenticate_user! }
+
+  # ...
+end
+```
+
+If you have an ember application, no client-side changes are necessary to use a
+secure API method, as long as the action that serves your ember app requires
+users to authenticate with G5 via devise.
+
+Any non-browser clients must use token-based authentication. In contexts where
+a valid OAuth 2.0 access token is not already available, you may request a new
+token from the G5 Auth server using
+[g5_authentication_client](https://github.com/g5search/g5_authentication_client).
+Clients may pass the token to secure API actions either in the HTTP
+Authorization header, or in a request parameter named `access_token`.
+
+For more details, see the documentation for
+[g5_authenticatable_api](https://github.com/g5search/g5_authenticatable_api).
+
 ### Test Helpers ###
 
 When creating feature specs using RSpec, a user is available via let(:user).
@@ -186,18 +236,6 @@ context 'my context', :auth do
 
 end
 ```
-
-### Access token
-
-When a user authenticates, their OAuth access token will be stored on
-the local user:
-
-```ruby
-current_user.g5_access_token
-```
-
-This is to support server-to-server API calls with G5 services that are
-protected by OAuth.
 
 ## Examples
 
@@ -233,9 +271,27 @@ but must also use the DELETE HTTP method:
 <%= link_to('Logout', destroy_session_path(:user), :method => :delete) %>
 ```
 
+### Selectively securing API methods
+
+To selectively secure an individual API method:
+
+```ruby
+class MyApi < Grape::API
+  get :my_secure_action do
+    authenticate_user!
+    {message: 'secure action'}
+  end
+
+  get :anonymous_action do
+    {message: 'hello world'}
+  end
+end
+```
+
 ## Authors
 
 * Maeve Revels / [@maeve](https://github.com/maeve)
+* Rob Revels / [@sleverbor](https://github.com/sleverbor)
 
 ## Contributing
 
