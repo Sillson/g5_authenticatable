@@ -12,6 +12,7 @@ require 'rspec/rails'
 require 'rspec/autorun'
 require 'capybara/rspec'
 require 'webmock/rspec'
+require 'g5_authenticatable/rspec'
 
 Rails.backtrace_cleaner.remove_silencers!
 

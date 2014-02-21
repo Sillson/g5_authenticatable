@@ -21,6 +21,9 @@ shared_context 'auth request', auth_request: true do
 
   before { login_user(user) }
   after { logout_user }
+end
 
-  after { Warden.test_reset! }
+RSpec.configure do |config|
+  config.include G5Authenticatable::Test::RequestHelpers, type: :request
+  config.after { Warden.test_reset! }
 end
