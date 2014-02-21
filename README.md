@@ -221,19 +221,70 @@ For more details, see the documentation for
 
 ### Test Helpers ###
 
-When creating feature specs using RSpec, a user is available via let(:user).
-All requests within the context are authenticated as that user.
+G5 Authenticatable currently only supports [rspec-rails](https://github.com/rspec/rspec-rails).
+Helpers and shared contexts are provided for integration testing secure pages
+and API methods.
+
+#### Installation ####
+
+To automatically mix in helpers to your feature and request specs, include the
+following line in your `spec/spec_helper.rb`:
 
 ```ruby
-require 'authenticatable_test_helpers'
+require 'g5_authenticatable/rspec'
+```
 
-context 'my context', :auth do
+#### Feature Specs ####
 
+The easiest way to use g5_authenticatable in feature specs is through
+the shared auth context. This context creates a user (available via
+`let(:user)`) and then authenticates as that user. To use the shared
+context, simply include `:auth` in the RSpec metadata for your example
+or group:
+
+```ruby
+context 'my secure context', :auth do
   it 'can access some resource' do
     visit('the place')
     expect(page).to ...
   end
+end
+```
 
+If you prefer, you can use the helper methods from
+`G5Authenticatable::Test::FeatureHelpers` instead of relying on the shared
+context. For example:
+
+```ruby
+describe 'my page' do
+  context 'with valid user credentials' do
+    let(:my_user) { create(:g5_authenticatable_user, email: 'my.email@test.host') }
+    before { stub_g5_omniauth(my_user) }
+
+    it 'should display the secure page' do
+      visit('the page')
+      expect(page).to ...
+    end
+  end
+
+  context 'with invalid OAuth credentials' do
+    before { stub_g5_invalid_credentials }
+
+    it 'should display an error' do
+      visit('the page')
+      expect(page). to ...
+    end
+  end
+
+  context 'when user has previously authenticated' do
+    let(:my_user) { create(:g5_authenticatable_user, email: 'my.email@test.host') }
+    before { visit_path_and_login_with('some other path', my_user) }
+
+    it 'should display the thing I expect' do
+      visit('the page')
+      expect(page).to ...
+    end
+  end
 end
 ```
 
