@@ -288,6 +288,48 @@ describe 'my page' do
 end
 ```
 
+#### Request Specs ####
+
+You can test API methods that have been secured with g5_authenticatable by
+using the auth request shared context. This context creates a user (available
+via `let(:user)`) and then automatically authenticates as that user. To use the
+shared context, simply tag your example group with the `:auth_request` RSpec
+metadata:
+
+```ruby
+describe 'my secure API', :auth_request do
+  it 'can access some resource' do
+    get '/api/v1/resource'
+    expect(response).to ...
+  end
+end
+```
+
+Alternatively, you may wish to use the helper methods from
+`G5Authenticatable::Test::RequestHelpers` directly:
+
+```ruby
+describe 'my secure API' do
+  context 'when user is authenticated' do
+    before { login_user }
+
+    it 'can access some resource' do
+      get '/api/v1/resource'
+      expect(response).to be_success
+    end
+  end
+
+  context 'when there is no authenticated user' do
+    before { logout_user }
+
+    it 'cannot access the resource' do
+      get '/api/v1/resource'
+      expect(response.status).to eq(401)
+    end
+  end
+end
+```
+
 ## Examples
 
 ### Protecting a particular controller action
