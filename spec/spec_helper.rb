@@ -12,6 +12,7 @@ require 'rspec/rails'
 require 'rspec/autorun'
 require 'capybara/rspec'
 require 'webmock/rspec'
+require 'g5_authenticatable/rspec'
 
 Rails.backtrace_cleaner.remove_silencers!
 
@@ -44,6 +45,8 @@ RSpec.configure do |config|
   # the seed, which is printed after each run.
   #     --seed 1234
   config.order = 'random'
+
+  config.treat_symbols_as_metadata_keys_with_true_values = true
 
   config.after(:suite) { WebMock.disable! }
 end

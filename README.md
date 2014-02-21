@@ -4,12 +4,17 @@ G5 Authenticatable provides a default authentication solution for G5
 Rails applications. This gem configures and mounts 
 [Devise](https://github.com/plataformatec/devise) with a default User
 model, using [OmniAuth](https://github.com/intridea/omniauth) to authenticate
-to the G5 Auth server.
+to the G5 Auth server. Helpers are also provided to secure your API methods.
 
-If you are already using devise with your own model, this is not the
+If you are already using Devise with your own model, this is not the
 library you are looking for. Consider using the
 [devise_g5_authenticatable](https://github.com/g5search/devise_g5_authenticatable)
-extension directly instead.
+extension directly.
+
+If you have a stand-alone service without a UI, you may not need Devise at
+all. Consider using the
+[g5_authenticatable_api](https://github.com/g5search/g5_authenticatable_api)
+library in isolation.
 
 ## Current Version
 
@@ -169,25 +174,7 @@ g5_authenticatable.new_user_session_path
 g5_authenticatable.destroy_user_session_path
 ```
 
-### Test Helpers ###
-
-When creating feature specs using RSpec, a user is available via let(:user).
-All requests within the context are authenticated as that user.
-
-```ruby
-require 'authenticatable_test_helpers'
-
-context 'my context', :auth do
-
-  it 'can access some resource' do
-    visit('the place')
-    expect(page).to ...
-  end
-
-end
-```
-
-### Access token
+### Access token ###
 
 When a user authenticates, their OAuth access token will be stored on
 the local user:
@@ -198,6 +185,150 @@ current_user.g5_access_token
 
 This is to support server-to-server API calls with G5 services that are
 protected by OAuth.
+
+### Securing a Grape API ###
+
+The API helpers are primarily intended to secure
+[Grape](https://github.com/intridea/grape) endpoints, but they are compatible
+with any Rack-based API implementation.
+
+If you include the `G5AuthenticatableApi::GrapeHelpers`, you can use the
+`authenticate_user!` method to protect your API actions:
+
+```ruby
+class MyApi < Grape::API
+  helpers G5AuthenticatableApi::GrapeHelpers
+
+  before { authenticate_user! }
+
+  # ...
+end
+```
+
+If you have an ember application, no client-side changes are necessary to use a
+secure API method, as long as the action that serves your ember app requires
+users to authenticate with G5 via devise.
+
+Any non-browser clients must use token-based authentication. In contexts where
+a valid OAuth 2.0 access token is not already available, you may request a new
+token from the G5 Auth server using
+[g5_authentication_client](https://github.com/g5search/g5_authentication_client).
+Clients may pass the token to secure API actions either in the HTTP
+Authorization header, or in a request parameter named `access_token`.
+
+For more details, see the documentation for
+[g5_authenticatable_api](https://github.com/g5search/g5_authenticatable_api).
+
+### Test Helpers ###
+
+G5 Authenticatable currently only supports [rspec-rails](https://github.com/rspec/rspec-rails).
+Helpers and shared contexts are provided for integration testing secure pages
+and API methods.
+
+#### Installation ####
+
+To automatically mix in helpers to your feature and request specs, include the
+following line in your `spec/spec_helper.rb`:
+
+```ruby
+require 'g5_authenticatable/rspec'
+```
+
+#### Feature Specs ####
+
+The easiest way to use g5_authenticatable in feature specs is through
+the shared auth context. This context creates a user (available via
+`let(:user)`) and then authenticates as that user. To use the shared
+context, simply include `:auth` in the RSpec metadata for your example
+or group:
+
+```ruby
+context 'my secure context', :auth do
+  it 'can access some resource' do
+    visit('the place')
+    expect(page).to ...
+  end
+end
+```
+
+If you prefer, you can use the helper methods from
+`G5Authenticatable::Test::FeatureHelpers` instead of relying on the shared
+context. For example:
+
+```ruby
+describe 'my page' do
+  context 'with valid user credentials' do
+    let(:my_user) { create(:g5_authenticatable_user, email: 'my.email@test.host') }
+    before { stub_g5_omniauth(my_user) }
+
+    it 'should display the secure page' do
+      visit('the page')
+      expect(page).to ...
+    end
+  end
+
+  context 'with invalid OAuth credentials' do
+    before { stub_g5_invalid_credentials }
+
+    it 'should display an error' do
+      visit('the page')
+      expect(page). to ...
+    end
+  end
+
+  context 'when user has previously authenticated' do
+    let(:my_user) { create(:g5_authenticatable_user, email: 'my.email@test.host') }
+    before { visit_path_and_login_with('some other path', my_user) }
+
+    it 'should display the thing I expect' do
+      visit('the page')
+      expect(page).to ...
+    end
+  end
+end
+```
+
+#### Request Specs ####
+
+You can test API methods that have been secured with g5_authenticatable by
+using the auth request shared context. This context creates a user (available
+via `let(:user)`) and then automatically authenticates as that user. To use the
+shared context, simply tag your example group with the `:auth_request` RSpec
+metadata:
+
+```ruby
+describe 'my secure API', :auth_request do
+  it 'can access some resource' do
+    get '/api/v1/resource'
+    expect(response).to ...
+  end
+end
+```
+
+Alternatively, you may wish to use the helper methods from
+`G5Authenticatable::Test::RequestHelpers` directly:
+
+```ruby
+describe 'my secure API' do
+  context 'when user is authenticated' do
+    before { login_user }
+
+    it 'can access some resource' do
+      get '/api/v1/resource'
+      expect(response).to be_success
+    end
+  end
+
+  context 'when there is no authenticated user' do
+    before { logout_user }
+
+    it 'cannot access the resource' do
+      get '/api/v1/resource'
+      expect(response.status).to eq(401)
+    end
+  end
+end
+```
 
 ## Examples
 
@@ -233,9 +364,27 @@ but must also use the DELETE HTTP method:
 <%= link_to('Logout', destroy_session_path(:user), :method => :delete) %>
 ```
 
+### Selectively securing API methods
+
+To selectively secure an individual API method:
+
+```ruby
+class MyApi < Grape::API
+  get :my_secure_action do
+    authenticate_user!
+    {message: 'secure action'}
+  end
+
+  get :anonymous_action do
+    {message: 'hello world'}
+  end
+end
+```
+
 ## Authors
 
 * Maeve Revels / [@maeve](https://github.com/maeve)
+* Rob Revels / [@sleverbor](https://github.com/sleverbor)
 
 ## Contributing
 
