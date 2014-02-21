@@ -1,4 +1,4 @@
-require 'authenticatable_test_helpers'
+require 'g5_authenticatable/rspec'
 
 RSpec.configure do |config|
   config.before(:each) { OmniAuth.config.test_mode = true }
