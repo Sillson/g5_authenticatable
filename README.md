@@ -186,13 +186,11 @@ current_user.g5_access_token
 This is to support server-to-server API calls with G5 services that are
 protected by OAuth.
 
-### Securing a Grape API ###
+### Securing an API ###
 
-The API helpers are primarily intended to secure
-[Grape](https://github.com/intridea/grape) endpoints, but they are compatible
-with any Rack-based API implementation.
+#### Grape ####
 
-If you include the `G5AuthenticatableApi::GrapeHelpers`, you can use the
+If you include `G5AuthenticatableApi::Helpers::Grape`, you can use the
 `authenticate_user!` method to protect your API actions:
 
 ```ruby
@@ -204,6 +202,12 @@ class MyApi < Grape::API
   # ...
 end
 ```
+
+#### Rails ####
+
+TODO
+
+#### Secure Clients ####
 
 If you have an ember application, no client-side changes are necessary to use a
 secure API method, as long as the action that serves your ember app requires

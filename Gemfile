@@ -37,6 +37,6 @@ end
 # your gemspec. These might include edge Rails or gems from your path or
 # Git. Remember to move these dependencies to your gemspec before releasing
 # your gem to rubygems.org.
-
+gem 'g5_authenticatable_api', git: 'git@github.com:g5search/g5_authenticatable_api.git', branch: 'rails_api_helpers'
 # To use debugger
 # gem 'debugger'
