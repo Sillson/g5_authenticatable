@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe 'a secure Rails API' do
   describe 'POST request to an API-only action' do
-    subject(:api_call) { post '/rails/secure_resource' }
+    subject(:api_call) { post '/rails_api/secure_resource' }
 
     context 'with an authenticated user', :auth_request do
       it 'should be successful' do
@@ -19,8 +19,8 @@ describe 'a secure Rails API' do
     end
   end
 
-  describe 'GET json request to mixed type action' do
-    subject(:api_call) { get '/rails/secure_resource.json' }
+  describe 'GET json request to mixed API/website action' do
+    subject(:api_call) { get '/rails_api/secure_resource.json' }
 
     context 'with an authenticated user', :auth_request do
       it 'should be successful' do
@@ -37,8 +37,8 @@ describe 'a secure Rails API' do
     end
   end
 
-  describe 'GET html request to mixed type action' do
-    subject(:website_call) { get '/rails/secure_resource.html' }
+  describe 'GET html request to mixed API/website action' do
+    subject(:website_call) { get '/rails_api/secure_resource.html' }
 
     it 'should be a redirect' do
       website_call
