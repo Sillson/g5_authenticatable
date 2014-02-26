@@ -42,12 +42,12 @@ describe 'a secure Rails API' do
 
     it 'should be a redirect' do
       website_call
-      expect(resposne).to be_redirect
+      expect(response).to be_redirect
     end
 
     it 'should redirect to the new session path' do
       website_call
-      expect(response).to redirect_to(new_user_session_path)
+      expect(response).to redirect_to('/g5_auth/users/sign_in')
     end
   end
 end
