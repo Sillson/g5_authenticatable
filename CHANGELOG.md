@@ -1,3 +1,10 @@
+## v0.1.0 (2014-02-26)
+
+* Update dependency on [g5_authenticatable_api](https://github.com/g5search/g5_authenticatable_api)
+  to include new Rails API helpers.
+* Fix shared test helpers for client applications that do not mixin the FactoryGirl syntax methods
+  in their RSpec config.
+
 ## v0.0.4 (2014-02-20)
 
 * Integrate [g5_authenticatable_api](https://github.com/g5search/g5_authenticatable_api)
