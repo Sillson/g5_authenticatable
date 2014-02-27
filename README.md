@@ -186,13 +186,11 @@ current_user.g5_access_token
 This is to support server-to-server API calls with G5 services that are
 protected by OAuth.
 
-### Securing a Grape API ###
+### Securing an API ###
 
-The API helpers are primarily intended to secure
-[Grape](https://github.com/intridea/grape) endpoints, but they are compatible
-with any Rack-based API implementation.
+#### Grape ####
 
-If you include the `G5AuthenticatableApi::GrapeHelpers`, you can use the
+If you include `G5AuthenticatableApi::Helpers::Grape`, you can use the
 `authenticate_user!` method to protect your API actions:
 
 ```ruby
@@ -204,6 +202,26 @@ class MyApi < Grape::API
   # ...
 end
 ```
+
+#### Rails ####
+
+You can secure API actions that respond to json using the `authenticate_api_user!`
+method:
+
+```ruby
+class MyResourcesController < ApplicationController
+  respond_to :json
+
+  before_filter :authenticate_api_user!
+
+  def get
+    @resource = MyResource.find(params[:id])
+    respond_with(@resource)
+  end
+end
+```
+
+#### Secure Clients ####
 
 If you have an ember application, no client-side changes are necessary to use a
 secure API method, as long as the action that serves your ember app requires
@@ -332,7 +350,7 @@ end
 
 ## Examples
 
-### Protecting a particular controller action
+### Protecting a particular Rails controller action
 
 You can use all of the usual options to `before_filter` for more fine-grained
 control over where authentication is required. For example, to require
@@ -364,7 +382,7 @@ but must also use the DELETE HTTP method:
 <%= link_to('Logout', destroy_session_path(:user), :method => :delete) %>
 ```
 
-### Selectively securing API methods
+### Selectively securing Grape API methods
 
 To selectively secure an individual API method:
 
@@ -380,6 +398,38 @@ class MyApi < Grape::API
   end
 end
 ```
+
+### Securing a Rails controller that mixes API and website methods
+
+Within a Rails controller, the `authenticate_api_user!` looks for a token
+in the request and returns a 401 when a user cannot be authenticated.
+In contrast, devise's `authenticate_user!` filter assumes that client is a
+web browser, and redirects to the auth server sign in page when there is
+no authenticated user.
+
+Most of the time, there is a clear delineation between controllers
+that service API requests and controllers that service website requests,
+but not always. If you have a mixture of API and website actions in
+your controller, you can selectively apply the auth filters based on
+the request format:
+
+```ruby
+class MyMixedUpController < ApplicationController
+  before_filter :authenticate_api_user!, unless: :is_navigational_format?
+  before_filter :authenticate_user!, if: :is_navigational_format?
+
+  respond_to :html, :json
+
+  def show
+    resource = MyResource.find(params[:id])
+    respond_with(resource)
+  end
+end
+```
+
+In the code above, we assume that HTML requests come from a client that
+can display the auth server's sign in page to the end user, while all other
+formats are assumed to be API requests.
 
 ## Authors
 
