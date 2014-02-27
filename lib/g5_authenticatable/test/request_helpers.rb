@@ -17,7 +17,7 @@ end
 shared_context 'auth request', auth_request: true do
   include G5Authenticatable::Test::RequestHelpers
 
-  let(:user) { create(:g5_authenticatable_user) }
+  let(:user) { FactoryGirl.create(:g5_authenticatable_user) }
 
   before { login_user(user) }
   after { logout_user }
