@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe 'Signing in' do
-  let(:user) { create(:g5_authenticatable_user) }
+  let(:user) { FactoryGirl.create(:g5_authenticatable_user) }
 
   context 'from a login link' do
     subject(:login) { click_link 'Login' }
