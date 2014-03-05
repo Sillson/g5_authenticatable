@@ -15,5 +15,9 @@ module G5Authenticatable
       resource.update_g5_credentials(auth_data)
       resource.save!
     end
+
+    def after_omniauth_failure_path_for(scope)
+      auth_error_path
+    end
   end
 end
