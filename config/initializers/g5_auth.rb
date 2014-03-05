@@ -3,4 +3,6 @@ G5AuthenticationClient.configure do |defaults|
   defaults.client_secret = ENV['G5_AUTH_CLIENT_SECRET']
   defaults.redirect_uri = ENV['G5_AUTH_REDIRECT_URI']
   defaults.endpoint = ENV['G5_AUTH_ENDPOINT']
+  defaults.username = ENV['G5_AUTH_USERNAME']
+  defaults.password = ENV['G5_AUTH_PASSWORD']
 end
