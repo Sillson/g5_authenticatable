@@ -18,7 +18,7 @@ library in isolation.
 
 ## Current Version
 
-0.1.0
+0.1.3
 
 ## Requirements
 
@@ -106,6 +106,11 @@ environment variables for your client application:
 * `G5_AUTH_CLIENT_SECRET` - the OAuth 2.0 application secret from the auth server
 * `G5_AUTH_REDIRECT_URI` - the OAuth 2.0 redirect URI registered with the auth server
 * `G5_AUTH_ENDPOINT` - the endpoint URL for the G5 auth server
+
+You can also set up a default user's credentials with:
+
+* `G5_AUTH_USERNAME` - the G5 auth server user name
+* `G5_AUTH_PASSWORD` - the G5 auth server user's password
 
 ## Usage
 

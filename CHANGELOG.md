@@ -1,3 +1,11 @@
+## v0.1.3 (2014-03-06)
+
+* Remove auth client defaults in favor of env variables
+
+## v0.1.2 (2014-03-05)
+
+* Set G5_AUTH_USERNAME and G5_AUTH_PASSWORD on auth client defaults
+
 ## v0.1.0 (2014-02-26)
 
 * Update dependency on [g5_authenticatable_api](https://github.com/g5search/g5_authenticatable_api)
