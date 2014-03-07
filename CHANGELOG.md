@@ -1,3 +1,8 @@
+## v0.1.4 (2014-03-07)
+
+* Update dependency on [g5_authenticatable_api](https://github.com/g5search/g5_authenticatable_api)
+  for bug fix to ignore password credential configuration during token validation.
+
 ## v0.1.3 (2014-03-06)
 
 * Remove auth client defaults in favor of env variables
