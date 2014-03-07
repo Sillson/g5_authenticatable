@@ -21,5 +21,5 @@ Gem::Specification.new do |spec|
   spec.require_paths = ['lib']
 
   spec.add_dependency 'devise_g5_authenticatable', '~> 0.0.3'
-  spec.add_dependency 'g5_authenticatable_api', '~> 0.1'
+  spec.add_dependency 'g5_authenticatable_api', '~> 0.1.1'
 end
