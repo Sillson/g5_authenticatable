@@ -365,15 +365,15 @@ Rspec metadata:
 describe 'my secure action', :auth_controller do
   context 'when the user is authenticated' do
 	it 'can access some secure path' do
-	 get :my_action
-	 expect(response). to be_success
+	  get :my_action
+	  expect(response). to be_success
 	end
   end
 
   context 'whent there is no authenticated user' do
 	it 'cannot access the secure path' do
-		get :my_action
-		expect(reponse).to be_redirect
+	  get :my_action
+	  expect(reponse).to be_redirect
 	end
   end
 end
