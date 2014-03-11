@@ -24,5 +24,6 @@ shared_context 'auth controller', auth_controller: true do
 end
 
 RSpec.configure do |config|
+  config.include Devise::TestHelpers, :type => :controller
   config.include G5Authenticatable::Test::ControllerHelpers, type: :controller
 end
