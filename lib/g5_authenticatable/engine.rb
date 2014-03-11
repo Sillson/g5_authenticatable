@@ -7,5 +7,9 @@ module G5Authenticatable
       g.test_framework :rspec
       g.fixture_replacement :factory_girl, dir: 'spec/factories'
     end
+
+    initializer "g5_authenticatable.filter_access_token" do |app|
+      app.config.filter_parameters += [ :access_token ]
+    end
   end
 end
