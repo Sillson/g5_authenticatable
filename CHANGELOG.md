@@ -1,3 +1,7 @@
+## v0.2.0 (2014-03-11)
+
+* Controller test helpers
+
 ## v0.1.4 (2014-03-07)
 
 * Update dependency on [g5_authenticatable_api](https://github.com/g5search/g5_authenticatable_api)
