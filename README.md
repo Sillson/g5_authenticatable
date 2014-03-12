@@ -353,6 +353,32 @@ describe 'my secure API' do
 end
 ```
 
+#### Controller Specs ####
+
+You can test controller specs that have been secured with g5_authenticatable
+by using the controller spec shared context.  This context creates a user
+available via `let(:user)` and then automatically authenticates as that user.
+To use the shared context, tag your example group with the `:auth_controller`
+Rspec metadata:
+
+```ruby
+describe 'my secure action', :auth_controller do
+  context 'when the user is authenticated' do
+	it 'can access some secure path' do
+	  get :my_action
+	  expect(response). to be_success
+	end
+  end
+
+  context 'whent there is no authenticated user' do
+	it 'cannot access the secure path' do
+	  get :my_action
+	  expect(reponse).to be_redirect
+	end
+  end
+end
+```
+
 ## Examples
 
 ### Protecting a particular Rails controller action
