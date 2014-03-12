@@ -17,36 +17,6 @@ describe ::ApplicationController do
     expect(controller.g5_callback_path(:user)).to eq('/g5_auth/users/auth/g5/callback')
   end
 
-  describe 'test helpers' do
-    let(:response_value) { 'stuff' }
+  it_should_behave_like 'a secure controller'
 
-    controller do
-
-      before_filter :authenticate_user!
-
-      def index
-        render text: 'stuff'
-      end
-
-    end
-
-    context 'when there is an authenticated request', :auth_controller do
-
-      it 'should be successful' do
-        get :index
-        expect(response.body).to eq(response_value)
-      end
-
-    end
-
-    context 'when there is an unauthenticated request' do
-
-      it 'should be unsuccesful' do
-        get :index
-        expect(response).to redirect_to('/g5_auth/users/sign_in')
-      end
-
-    end
-
-  end
 end
