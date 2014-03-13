@@ -1,3 +1,7 @@
+## v0.3.0 (2014-03-13)
+
+* First open source release to [RubyGems](https://rubygems.org)
+
 ## v0.2.0 (2014-03-11)
 
 * Controller test helpers
