@@ -8,12 +8,12 @@ to the G5 Auth server. Helpers are also provided to secure your API methods.
 
 If you are already using Devise with your own model, this is not the
 library you are looking for. Consider using the
-[devise_g5_authenticatable](https://github.com/g5search/devise_g5_authenticatable)
+[devise_g5_authenticatable](https://github.com/G5/devise_g5_authenticatable)
 extension directly.
 
 If you have a stand-alone service without a UI, you may not need Devise at
 all. Consider using the
-[g5_authenticatable_api](https://github.com/g5search/g5_authenticatable_api)
+[g5_authenticatable_api](https://github.com/G5/g5_authenticatable_api)
 library in isolation.
 
 ## Current Version
@@ -73,14 +73,12 @@ root :to => 'home#index'
 
 ### Registering your OAuth application
 
-1. Visit the auth server admin console:
+1. Visit the auth server admin console and login:
   * For development, visit https://dev-auth.g5search.com/admin
   * For production, visit https://auth.g5search.com/admin
-2. Login as the default G5 admin (for credentials, see
-   Brian Ricker or Chris Kraybill).
-3. Click "New Application"
-4. Enter a name that recognizably identifies your application.
-5. Enter the redirect URI where the auth server should redirect
+2. Click "New Application"
+3. Enter a name that recognizably identifies your application.
+4. Enter the redirect URI where the auth server should redirect
    after the user successfully authenticates. It will be
    of the form `http://<your_host>/g5_auth/users/auth/g5/callback`.
 
@@ -92,10 +90,10 @@ root :to => 'home#index'
 
    If you are using the production G5 Auth server, the redirect URI **MUST**
    use HTTPS.
-6. For a trusted G5 application, check the "Auto-authorize?" checkbox. This
+5. For a trusted G5 application, check the "Auto-authorize?" checkbox. This
    skips the OAuth authorization step where the user is prompted to explicitly
    authorize the client application to access the user's data.
-7. Click "Submit" to obtain the client application's credentials.
+6. Click "Submit" to obtain the client application's credentials.
 
 ### Environment variables
 
@@ -235,12 +233,12 @@ users to authenticate with G5 via devise.
 Any non-browser clients must use token-based authentication. In contexts where
 a valid OAuth 2.0 access token is not already available, you may request a new
 token from the G5 Auth server using
-[g5_authentication_client](https://github.com/g5search/g5_authentication_client).
+[g5_authentication_client](https://github.com/G5/g5_authentication_client).
 Clients may pass the token to secure API actions either in the HTTP
 Authorization header, or in a request parameter named `access_token`.
 
 For more details, see the documentation for
-[g5_authenticatable_api](https://github.com/g5search/g5_authenticatable_api).
+[g5_authenticatable_api](https://github.com/G5/g5_authenticatable_api).
 
 ### Test Helpers ###
 
@@ -469,7 +467,7 @@ formats are assumed to be API requests.
 
 ## Contributing
 
-1. [Fork it](https://github.com/g5search/g5_authenticatable/fork)
+1. [Fork it](https://github.com/G5/g5_authenticatable/fork)
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Write your code and **specs**
 4. Commit your changes (`git commit -am 'Add some feature'`)
@@ -477,7 +475,7 @@ formats are assumed to be API requests.
 6. Create a new Pull Request
 
 If you find bugs, have feature requests or questions, please
-[file an issue](https://github.com/g5search/g5_authenticatable/issues).
+[file an issue](https://github.com/G5/g5_authenticatable/issues).
 
 ### Specs
 

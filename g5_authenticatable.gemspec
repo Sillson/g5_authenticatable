@@ -12,7 +12,7 @@ Gem::Specification.new do |spec|
   spec.description   = %q{An engine that provides a basic User model,
                           authentication logic, and remote credential
                           management for G5 applications.}
-  spec.homepage      = 'https://github.com/g5search/g5_authenticatable'
+  spec.homepage      = 'https://github.com/G5/g5_authenticatable'
   spec.license       = 'MIT'
 
   spec.files         = `git ls-files -z`.split("\x0")
