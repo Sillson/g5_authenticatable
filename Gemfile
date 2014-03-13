@@ -1,9 +1,4 @@
-#this allows the .env value to work
-require 'dotenv'
-Dotenv.load
-
 source 'https://rubygems.org'
-source "https://#{ENV['GEMFURY_TOKEN']}@gem.fury.io/me/"
 
 # Declare your gem's dependencies in g5_authenticatable.gemspec.
 # Bundler will treat runtime dependencies like base dependencies, and
