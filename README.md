@@ -103,9 +103,12 @@ environment variables for your client application:
 * `G5_AUTH_CLIENT_ID` - the OAuth 2.0 application ID from the auth server
 * `G5_AUTH_CLIENT_SECRET` - the OAuth 2.0 application secret from the auth server
 * `G5_AUTH_REDIRECT_URI` - the OAuth 2.0 redirect URI registered with the auth server
-* `G5_AUTH_ENDPOINT` - the endpoint URL for the G5 auth server
+* `G5_AUTH_ENDPOINT` - the endpoint URL (without any path info) for the G5 auth server.
+  Generally, this will be set to either `https://dev-auth.g5search.com` or
+  `https://auth.g5search.com`.
 
-You can also set up a default user's credentials with:
+If you need to make server-to-server API calls that are not associated with an
+end user, you can also set up a default user's credentials with:
 
 * `G5_AUTH_USERNAME` - the G5 auth server user name
 * `G5_AUTH_PASSWORD` - the G5 auth server user's password
