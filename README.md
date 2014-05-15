@@ -85,7 +85,7 @@ root :to => 'home#index'
    For non-production environments, this redirect URI does not have to
    be publicly accessible, but it must be accessible from the browser
    where you will be testing (so using something like
-   http://localhost:3000/users/auth/g5/callback is fine if your browser
+   http://localhost:3000/g5_auth/users/auth/g5/callback is fine if your browser
    and client application server are both local).
 
    If you are using the production G5 Auth server, the redirect URI **MUST**
