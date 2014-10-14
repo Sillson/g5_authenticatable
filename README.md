@@ -463,6 +463,29 @@ In the code above, we assume that HTML requests come from a client that
 can display the auth server's sign in page to the end user, while all other
 formats are assumed to be API requests.
 
+If HTML requests do not imply a client capable of providing a user to interact with
+a signup form, you can try something like this:
+
+```ruby
+class MyMixedUpController < ApplicationController
+  before_filter :authenticate_api_user!, if: :is_api_request?
+  before_filter :authenticate_user!, unless: :is_api_request?
+
+  respond_to :html
+
+  def show
+    resource = MyResource.find(params[:id])
+    respond_with(resource)
+  end
+
+  private
+
+  def is_api_request?
+	!G5Authenticatable::TokenValidator.new(params, headers).access_token.nil?
+  end
+end
+```
+
 ## Authors
 
 * Maeve Revels / [@maeve](https://github.com/maeve)
