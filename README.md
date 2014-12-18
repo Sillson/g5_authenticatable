@@ -363,19 +363,19 @@ To use the shared context, tag your example group with the `:auth_controller`
 Rspec metadata:
 
 ```ruby
-describe 'my secure action', :auth_controller do
+describe 'my secure action' do
   context 'when the user is authenticated' do
-	it 'can access some secure path' do
-	  get :my_action
-	  expect(response). to be_success
-	end
+    it 'can access some secure path' do
+      get :my_action
+      expect(response). to be_success
+    end
   end
 
-  context 'whent there is no authenticated user' do
-	it 'cannot access the secure path' do
-	  get :my_action
-	  expect(reponse).to be_redirect
-	end
+  context 'when there is no authenticated user', :auth_controller do
+    it 'cannot access the secure path' do
+      get :my_action
+      expect(reponse).to be_redirect
+    end
   end
 end
 ```
