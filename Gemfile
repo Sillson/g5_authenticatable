@@ -15,7 +15,7 @@ gem 'pg'
 gem 'grape'
 
 group :test, :development do
-  gem 'rspec-rails', '~> 2.14'
+  gem 'rspec-rails', '~> 2.99'
   gem 'pry'
   gem 'dotenv-rails'
 end
