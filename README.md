@@ -258,6 +258,32 @@ following line in your `spec/spec_helper.rb`:
 require 'g5_authenticatable/rspec'
 ```
 
+Note that the example code assumes you are using Rspec 3 metadata syntax. If you are
+using Rspec 2.x, you can either:
+
+* Enable this syntax with the following config in your `spec/spec_helper.rb`:
+
+  ```ruby
+  RSpec.configure do |config|
+    config.treat_symbols_as_metadata_keys_with_true_values = true
+  end
+  ```
+
+* Or you can replace every instance of a bare symbol in the metadata with a full
+  key-value pair. For example:
+
+  ```ruby
+  # This won't work out of the box with Rspec 2
+  context 'my secure context', :auth do
+    it 'can see my secrets'
+  end
+
+  # But this will...
+  context 'my secure context', auth: true do
+    it 'can see my secrets'
+  end
+  ```
+
 #### Feature Specs ####
 
 The easiest way to use g5_authenticatable in feature specs is through
