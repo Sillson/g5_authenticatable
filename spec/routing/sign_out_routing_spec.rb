@@ -7,10 +7,4 @@ describe 'Sign out routes' do
     expect(get('/users/sign_out')).to route_to(controller: 'g5_authenticatable/sessions',
                                                action: 'destroy')
   end
-
-  it 'should route DELETE /g5_auth/users/sign_out' do
-    expect(delete('/users/sign_out')).to route_to(controller: 'g5_authenticatable/sessions',
-                                                  action: 'destroy')
-
-  end
 end
