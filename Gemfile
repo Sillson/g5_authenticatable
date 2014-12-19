@@ -5,9 +5,6 @@ source 'https://rubygems.org'
 # development dependencies will be added by default to the :development group.
 gemspec
 
-# TODO: remove this when the next version of devise_g5_authenticatable is released
-gem 'devise_g5_authenticatable', git: 'git@github.com:G5/devise_g5_authenticatable', branch: 'sign_out_fixes'
-
 # Gems used by the dummy application
 gem 'rails', '4.1.4'
 gem 'jquery-rails'
