@@ -407,11 +407,10 @@ In your view template, add the following:
 
 ### Adding a link to sign out
 
-In order to sign out, the link must not only have the correct path,
-but must also use the DELETE HTTP method:
+In your view template, add the following:
 
 ```html+erb
-<%= link_to('Logout', destroy_session_path(:user), :method => :delete) %>
+<%= link_to('Logout', destroy_session_path(:user)) %>
 ```
 
 ### Selectively securing Grape API methods
