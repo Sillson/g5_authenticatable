@@ -406,6 +406,23 @@ describe 'my secure action' do
 end
 ```
 
+### Purging local user data
+
+G5 Authenticatable automatically maintains user data locally via the
+`G5Authenticatable::User` model. This local data can be purged
+using the following rake task:
+
+```console
+$ rake g5_authenticatable:purge_users
+```
+
+Executing this task does not affect any remote user data on the
+auth server.
+
+It is especially important to purge the local user data
+when reconfiguring a client application to use a different auth endpoint
+(for example, when cloning a demo environment from production).
+
 ## Examples
 
 ### Protecting a particular Rails controller action
