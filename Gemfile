@@ -5,8 +5,6 @@ source 'https://rubygems.org'
 # development dependencies will be added by default to the :development group.
 gemspec
 
-gem 'g5_authenticatable_api', git: 'git@github.com:G5/g5_authenticatable_api.git', branch: 'validate_session_token'
-
 # Gems used by the dummy application
 gem 'rails', '4.1.4'
 gem 'jquery-rails'
