@@ -1,3 +1,12 @@
+## v0.4.0 (TBD)
+
+* Improved documentation around controller test helpers
+  ([#20](https://github.com/G5/g5_authenticatable/issues/20))
+* Added `g5_authenticatable:purge_users` rake task to purge local user data;
+  primarily used for configuring demo/dev environments built on a production
+  clone or DB dump
+  ([#23](https://github.com/G5/g5_authenticatable/pull/23))
+
 ## v0.3.0 (2014-03-13)
 
 * First open source release to [RubyGems](https://rubygems.org)
@@ -17,7 +26,7 @@
 
 ## v0.1.2 (2014-03-05)
 
-* Set G5_AUTH_USERNAME and G5_AUTH_PASSWORD on auth client defaults
+* Set `G5_AUTH_USERNAME` and `G5_AUTH_PASSWORD` on auth client defaults
 
 ## v0.1.0 (2014-02-26)
 
