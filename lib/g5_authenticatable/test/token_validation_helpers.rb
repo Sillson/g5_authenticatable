@@ -21,5 +21,5 @@ module G5Authenticatable
 end
 
 RSpec.configure do |config|
-  config.include G5Authenticatable::Test::TokenValidationHelpers, type: :request
+  config.include G5Authenticatable::Test::TokenValidationHelpers
 end

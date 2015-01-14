@@ -16,6 +16,7 @@ module G5Authenticatable
 
       def visit_path_and_login_with(path, user)
         stub_g5_omniauth(user)
+        stub_valid_access_token(user.g5_access_token)
         visit path
       end
     end
