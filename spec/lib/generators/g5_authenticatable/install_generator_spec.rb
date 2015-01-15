@@ -7,7 +7,7 @@ require 'spec_helper'
 require 'generators/g5_authenticatable/install/install_generator'
 
 describe G5Authenticatable::InstallGenerator, type: :generator do
-  destination File.expand_path('../../../tmp', __FILE__)
+  destination File.expand_path('../../../../tmp', __FILE__)
 
   before do
     prepare_destination
@@ -21,6 +21,18 @@ describe G5Authenticatable::InstallGenerator, type: :generator do
         directory 'migrate' do
           migration 'create_g5_authenticatable_users' do
             contains 'class CreateG5AuthenticatableUsers < ActiveRecord::Migration'
+          end
+        end
+      end
+    }
+  end
+
+  it 'should copy the initializer' do
+    expect(destination_root).to have_structure {
+      directory 'config' do
+        directory 'initializers' do
+          file 'g5_authenticatable.rb' do
+            contains '# G5Authenticatable.strict_token_validation = true'
           end
         end
       end
