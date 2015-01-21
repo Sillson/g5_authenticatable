@@ -113,6 +113,21 @@ end user, you can also set up a default user's credentials with:
 * `G5_AUTH_USERNAME` - the G5 auth server user name
 * `G5_AUTH_PASSWORD` - the G5 auth server user's password
 
+### Token validation
+
+By default, G5 Authenticatable only validates access tokens on incoming API
+requests. If you are relying on session-based authentication instead, it is
+possible for the local application's session to remain active after the
+global access token has been revoked.
+
+If you want to guarantee that the local session is destroyed when the access
+token is revoked, add the following to
+`config/initializers/g5_authenticatable.rb`:
+
+```ruby
+G5Authenticatable.strict_token_validation = true
+```
+
 ## Usage
 
 ### Controller filters and helpers
@@ -450,11 +465,10 @@ In your view template, add the following:
 
 ### Adding a link to sign out
 
-In order to sign out, the link must not only have the correct path,
-but must also use the DELETE HTTP method:
+In your view template, add the following:
 
 ```html+erb
-<%= link_to('Logout', destroy_session_path(:user), :method => :delete) %>
+<%= link_to('Logout', destroy_session_path(:user)) %>
 ```
 
 ### Selectively securing Grape API methods

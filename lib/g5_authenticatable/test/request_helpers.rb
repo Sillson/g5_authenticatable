@@ -19,7 +19,16 @@ shared_context 'auth request', auth_request: true do
 
   let(:user) { FactoryGirl.create(:g5_authenticatable_user) }
 
-  before { login_user(user) }
+  let!(:orig_auth_endpoint) { ENV['G5_AUTH_ENDPOINT'] }
+  let(:auth_endpoint) { 'https://test.auth.host' }
+  before { ENV['G5_AUTH_ENDPOINT'] = auth_endpoint }
+  after { ENV['G5_AUTH_ENDPOINT'] = orig_auth_endpoint }
+
+  before do
+    login_user(user)
+    stub_valid_access_token(user.g5_access_token)
+  end
+
   after { logout_user }
 end
 

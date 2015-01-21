@@ -17,4 +17,8 @@ class G5Authenticatable::InstallGenerator < Rails::Generators::Base
   def mount_engine
     route "mount G5Authenticatable::Engine => '/g5_auth'"
   end
+
+  def create_initializer
+    template 'g5_authenticatable.rb', 'config/initializers/g5_authenticatable.rb'
+  end
 end

@@ -19,5 +19,9 @@ module G5Authenticatable
     def after_omniauth_failure_path_for(scope)
       auth_error_path
     end
+
+    def after_sign_out_path_for(resource_or_scope)
+      main_app.root_path
+    end
   end
 end
