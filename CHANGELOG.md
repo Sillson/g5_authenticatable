@@ -1,7 +1,10 @@
-## v0.4.0 (TBD)
+## v0.4.0 (2015-01-20)
 
+* Several fixes around sign-out, including accepting GET requests and
+  enabling strict token validation
+  ([#21](https://github.com/G5/g5_authenticatable/pull/21))
 * Improved documentation around controller test helpers
-  ([#20](https://github.com/G5/g5_authenticatable/issues/20))
+  ([#22](https://github.com/G5/g5_authenticatable/pull/22))
 * Added `g5_authenticatable:purge_users` rake task to purge local user data;
   primarily used for configuring demo/dev environments built on a production
   clone or DB dump
