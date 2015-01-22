@@ -1,8 +1,17 @@
+module G5Authenticatable
+  module Test
+    module EnvHelpers
+      def stub_env_var(name, value)
+        stub_const('ENV', ENV.to_hash.merge(name => value))
+      end
+    end
+  end
+end
+
 RSpec.configure do |config|
-  config.around(:each) do |example|
-    orig_auth_endpoint = ENV['G5_AUTH_ENDPOINT']
-    ENV['G5_AUTH_ENDPOINT'] = 'https://test.auth.host'
-    example.run
-    ENV['G5_AUTH_ENDPOINT'] = orig_auth_endpoint
+  config.include G5Authenticatable::Test::EnvHelpers
+
+  config.before(:each) do
+    stub_env_var('G5_AUTH_ENDPOINT', 'https://test.auth.host')
   end
 end
