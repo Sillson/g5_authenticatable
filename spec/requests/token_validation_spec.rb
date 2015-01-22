@@ -1,12 +1,7 @@
 require 'spec_helper'
 
 describe 'API Token validation' do
-  let!(:old_auth_endpoint) { ENV['G5_AUTH_ENDPOINT'] }
-  before { ENV['G5_AUTH_ENDPOINT'] = auth_endpoint }
-  after { ENV['G5_AUTH_ENDPOINT'] = old_auth_endpoint }
-  let(:auth_endpoint) { 'https://auth.test.host' }
-
-  let(:token_info_url) { URI.join(auth_endpoint, '/oauth/token/info') }
+  let(:token_info_url) { URI.join(ENV['G5_AUTH_ENDPOINT'], '/oauth/token/info') }
 
   subject(:api_call) { get '/rails_api/secure_resource.json' }
 

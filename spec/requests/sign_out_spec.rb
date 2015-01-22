@@ -5,12 +5,8 @@ require 'spec_helper'
 # with mocks for external redirects (the capybara-mechanize driver
 # comes closest, but not quite)
 describe 'Signing out' do
-  before { ENV['G5_AUTH_ENDPOINT'] = auth_endpoint }
-  after { ENV['G5_AUTH_ENDPOINT'] = nil }
-  let(:auth_endpoint) { 'https://auth.test.host' }
-
   let(:auth_sign_out_url) do
-    "#{auth_endpoint}/users/sign_out?redirect_url=http%3A%2F%2Fwww.example.com%2F"
+    "#{ENV['G5_AUTH_ENDPOINT']}/users/sign_out?redirect_url=http%3A%2F%2Fwww.example.com%2F"
   end
 
   describe 'GET /g5_auth/users/sign_out' do

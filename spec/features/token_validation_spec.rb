@@ -1,11 +1,6 @@
 require 'spec_helper'
 
 describe 'UI Token validation' do
-  let!(:old_auth_endpoint) { ENV['G5_AUTH_ENDPOINT'] }
-  before { ENV['G5_AUTH_ENDPOINT'] = auth_endpoint }
-  after { ENV['G5_AUTH_ENDPOINT'] = old_auth_endpoint }
-  let(:auth_endpoint) { 'https://auth.test.host' }
-
   context 'when token validation is enabled' do
     before { G5Authenticatable.strict_token_validation = true }
 
