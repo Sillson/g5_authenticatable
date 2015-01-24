@@ -421,6 +421,59 @@ describe 'my secure action' do
 end
 ```
 
+#### Token Validation Helpers ####
+
+If you tag your examples with auth metadata (e.g. `:auth`, `:auth_request` or
+`:auth_controller`), then the shared context will automatically take care of
+any stubs required to support strict token validation.
+
+However, if you are using the auth test helper methods directly, and you have
+enabled strict token validation, then you will need to use the methods in
+`G5Authenticatable::Test::TokenValidationHelpers` to stub external calls to
+validate the access token.
+
+For example, in a feature spec, you could use the `stub_valid_access_token`
+method like so:
+
+```ruby
+describe 'my page' do
+  let(:user) { FactoryGirl.create(:g5_authenticatable_user) }
+
+  before do
+    stub_g5_omniauth(user)
+    stub_valid_access_token(user.g5_access_token)
+  end
+
+  it 'should let me in'
+end
+```
+
+As another example, in a request spec, you could stub a revoked access
+token using the `stub_invalid_access_token` helper:
+
+```ruby
+describe 'my API call' do
+  let(:user) { FactoryGirl.create(:g5_authenticatable_user) }
+
+  before { login_user }
+
+  context 'when token becomes invalid after login' do
+    before { stub_invalid_access_token(user.g5_access_token) }
+
+    it 'should return 401'
+  end
+
+  context 'when token remains valid after login' do
+    before { stub_valid_access_token(user.g5_access_token) }
+
+    it 'should return 200'
+  end
+end
+```
+
+The same token validation helpers are also available in controller
+specs, or anywhere else that authentication logic may be invoked.
+
 ### Purging local user data
 
 G5 Authenticatable automatically maintains user data locally via the
