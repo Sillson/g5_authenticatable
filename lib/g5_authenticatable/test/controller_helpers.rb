@@ -19,7 +19,11 @@ shared_context 'auth controller', auth_controller: true do
   include G5Authenticatable::Test::ControllerHelpers
   let(:user) { FactoryGirl.create(:g5_authenticatable_user) }
 
-  before { login_user(user) }
+  before do
+    stub_valid_access_token(user.g5_access_token)
+    login_user(user)
+  end
+
   after { logout_user(user) }
 end
 

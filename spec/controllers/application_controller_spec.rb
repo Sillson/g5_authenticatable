@@ -17,6 +17,15 @@ describe ::ApplicationController do
     expect(controller.g5_callback_path(:user)).to eq('/g5_auth/users/auth/g5/callback')
   end
 
-  it_should_behave_like 'a secure controller'
+  context 'when strict token validation is enabled' do
+    before { G5Authenticatable.strict_token_validation = true }
 
+    it_should_behave_like 'a secure controller'
+  end
+
+  context 'when strict token validation is disabled' do
+    before { G5Authenticatable.strict_token_validation = false }
+
+    it_should_behave_like 'a secure controller'
+  end
 end

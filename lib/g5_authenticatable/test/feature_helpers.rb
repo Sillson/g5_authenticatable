@@ -28,7 +28,10 @@ shared_context 'auth', auth: true do
 
   let(:user) { FactoryGirl.create(:g5_authenticatable_user) }
 
-  before { stub_g5_omniauth(user) }
+  before do
+    stub_g5_omniauth(user)
+    stub_valid_access_token(user.g5_access_token)
+  end
 end
 
 RSpec.configure do |config|
