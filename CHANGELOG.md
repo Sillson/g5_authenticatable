@@ -1,3 +1,8 @@
+## v0.4.1 (2015-01-26)
+
+* Fix test helpers when strict token validation is enabled during testing
+  ([#24](https://github.com/G5/g5_authenticatable/pull/24))
+
 ## v0.4.0 (2015-01-20)
 
 * Several fixes around sign-out, including accepting GET requests and
