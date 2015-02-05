@@ -6,7 +6,7 @@ source 'https://rubygems.org'
 gemspec
 
 # Gems used by the dummy application
-gem 'rails', '4.1.4'
+gem 'rails', '4.2.0'
 gem 'jquery-rails'
 gem 'pg'
 gem 'grape'
@@ -15,6 +15,7 @@ group :test, :development do
   gem 'rspec-rails', '~> 2.99'
   gem 'pry'
   gem 'dotenv-rails'
+  gem 'web-console', '~> 2.0'
 end
 
 group :test do
