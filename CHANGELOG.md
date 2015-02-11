@@ -1,3 +1,8 @@
+## v0.4.2 (2015-02-10)
+
+* Override `Devise::FailureApp` with fix for compatibility with Rails 4.2
+  ([#26](https://github.com/G5/g5_authenticatable/pull/26))
+
 ## v0.4.1 (2015-01-26)
 
 * Fix test helpers when strict token validation is enabled during testing
