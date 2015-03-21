@@ -264,6 +264,15 @@ G5 Authenticatable currently only supports [rspec-rails](https://github.com/rspe
 Helpers and shared contexts are provided for integration testing secure pages
 and API methods.
 
+#### Prerequisites ####
+
+Because the test helpers are optional, bundler will not automatically install
+these dependencies. You will have to add the following gems to your own Gemfile:
+
+* [rspec-rails](https://github.com/rspec/rspec-rails)
+* [factory_girl_rails](https://github.com/thoughtbot/factory_girl_rails)
+* [webmock](https://github.com/bblimke/webmock)
+
 #### Installation ####
 
 To automatically mix in helpers to your feature and request specs, include the
