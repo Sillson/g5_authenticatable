@@ -1,3 +1,8 @@
+## Next release (TBD)
+
+* Updated documentation around test helper dependencies and incompatibilities
+  ([#30](https://github.com/G5/g5_authenticatable/pull/30))
+
 ## v0.4.2 (2015-02-10)
 
 * Override `Devise::FailureApp` with fix for compatibility with Rails 4.2
