@@ -264,6 +264,27 @@ G5 Authenticatable currently only supports [rspec-rails](https://github.com/rspe
 Helpers and shared contexts are provided for integration testing secure pages
 and API methods.
 
+#### Prerequisites ####
+
+Because the test helpers are optional, bundler will not automatically install
+these dependencies. You will have to add the following gems to your own Gemfile:
+
+* [rspec-rails](https://github.com/rspec/rspec-rails)
+* [factory_girl_rails](https://github.com/thoughtbot/factory_girl_rails)
+* [webmock](https://github.com/bblimke/webmock)
+
+#### Incompatibilities ####
+
+There are [known issues](https://github.com/G5/g5_authenticatable/issues/27) using the
+auth test helpers with [selenium-webdriver](http://docs.seleniumhq.org/projects/webdriver/)
+and the Firefox browser. As such, selenium-webdriver is not officially supported by
+the G5 Authenticatable library.
+
+If you are using [capybara](https://github.com/jnicklas/capybara) to run your
+integration tests, we highly recommend using
+[poltergeist](https://github.com/teampoltergeist/poltergeist) for PhantomJS as
+your javascript driver instead.
+
 #### Installation ####
 
 To automatically mix in helpers to your feature and request specs, include the
