@@ -6,6 +6,7 @@ Example:
 
     This will create:
         db/migrate/create_g5_authenticatable_users.rb
+        db/migrate/add_g5_authenticatable_users_contact_info.rb
 
     This will modify:
         config/routes.rb

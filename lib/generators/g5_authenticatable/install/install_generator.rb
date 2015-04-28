@@ -21,4 +21,9 @@ class G5Authenticatable::InstallGenerator < Rails::Generators::Base
   def create_initializer
     template 'g5_authenticatable.rb', 'config/initializers/g5_authenticatable.rb'
   end
+
+  def users_contact_info_migration
+    filename = 'add_g5_authenticatable_users_contact_info.rb'
+    migration_template filename, "db/migrate/#{filename}"
+  end
 end
