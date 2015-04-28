@@ -29,11 +29,31 @@ describe G5Authenticatable::User do
     expect(user).to respond_to(:update_tracked_fields!)
   end
 
-  it { should validate_presence_of(:email) }
-  it { should validate_uniqueness_of(:email) }
-  it { should validate_uniqueness_of(:uid).scoped_to(:provider) }
+  it { is_expected.to validate_presence_of(:email) }
+  it { is_expected.to validate_uniqueness_of(:email) }
+  it { is_expected.to validate_uniqueness_of(:uid).scoped_to(:provider) }
 
   it 'should support timeouts' do
     expect(user.timeout_in).to be > 0
+  end
+
+  it 'should expose the first_name' do
+    expect(user.first_name).to eq(user_attributes[:first_name])
+  end
+
+  it 'should expose the last_name' do
+    expect(user.last_name).to eq(user_attributes[:last_name])
+  end
+
+  it 'should expose the phone number' do
+    expect(user.phone_number).to eq(user_attributes[:phone_number])
+  end
+
+  it 'should expose the title' do
+    expect(user.title).to eq(user_attributes[:title])
+  end
+
+  it 'should expose the organization name' do
+    expect(user.organization_name).to eq(user_attributes[:organization_name])
   end
 end
