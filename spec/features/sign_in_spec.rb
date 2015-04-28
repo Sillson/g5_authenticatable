@@ -29,7 +29,8 @@ describe 'Signing in' do
           uid: uid,
           provider: 'g5',
           info: {email: 'new.test.user@test.host'},
-          credentials: {token: g5_access_token}
+          credentials: {token: g5_access_token},
+          extra: {}
         })
       end
 
