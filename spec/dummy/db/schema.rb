@@ -11,9 +11,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140206070137) do
+ActiveRecord::Schema.define(version: 20150428182339) do
 
-  create_table "g5_authenticatable_users", force: true do |t|
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
+  create_table "g5_authenticatable_users", force: :cascade do |t|
     t.string   "email",              default: "",   null: false
     t.string   "provider",           default: "g5", null: false
     t.string   "uid",                               null: false
@@ -25,9 +28,14 @@ ActiveRecord::Schema.define(version: 20140206070137) do
     t.string   "last_sign_in_ip"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "first_name"
+    t.string   "last_name"
+    t.string   "phone_number"
+    t.string   "title"
+    t.string   "organization_name"
   end
 
-  add_index "g5_authenticatable_users", ["email"], name: "index_g5_authenticatable_users_on_email", unique: true
-  add_index "g5_authenticatable_users", ["provider", "uid"], name: "index_g5_authenticatable_users_on_provider_and_uid", unique: true
+  add_index "g5_authenticatable_users", ["email"], name: "index_g5_authenticatable_users_on_email", unique: true, using: :btree
+  add_index "g5_authenticatable_users", ["provider", "uid"], name: "index_g5_authenticatable_users_on_provider_and_uid", unique: true, using: :btree
 
 end
