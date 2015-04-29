@@ -12,4 +12,8 @@ FactoryGirl.define do
     title 'Minister of Funny Walks'
     organization_name 'Department of Redundancy Department'
   end
+
+  factory :g5_authenticatable_role, :class => 'G5Authenticatable::Role' do
+    sequence(:name) { |n| "role_#{n}" }
+  end
 end

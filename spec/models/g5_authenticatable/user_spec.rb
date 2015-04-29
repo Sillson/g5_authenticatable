@@ -5,6 +5,8 @@ describe G5Authenticatable::User do
   let(:user) { G5Authenticatable::User.create(user_attributes) }
   let(:user_attributes) { FactoryGirl.attributes_for(:g5_authenticatable_user) }
 
+  it { is_expected.to have_and_belong_to_many(:roles) }
+
   it 'should expose the email' do
     expect(user.email).to eq(user_attributes[:email])
   end

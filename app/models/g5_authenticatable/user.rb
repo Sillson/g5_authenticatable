@@ -1,5 +1,7 @@
 module G5Authenticatable
   class User < ActiveRecord::Base
+    has_and_belongs_to_many :roles, :join_table => :g5_authenticatable_users_roles
+
     devise :g5_authenticatable, :trackable, :timeoutable
 
     validates :email, presence: true, uniqueness: true

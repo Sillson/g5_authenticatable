@@ -39,6 +39,18 @@ describe G5Authenticatable::InstallGenerator, type: :generator do
     }
   end
 
+  it 'should copy the migration to add user roles' do
+    expect(destination_root).to have_structure {
+      directory 'db' do
+        directory 'migrate' do
+          migration 'create_g5_authenticatable_roles' do
+            contains 'class CreateG5AuthenticatableRoles < ActiveRecord::Migration'
+          end
+        end
+      end
+    }
+  end
+
   it 'should copy the initializer' do
     expect(destination_root).to have_structure {
       directory 'config' do
