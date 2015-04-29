@@ -9,17 +9,17 @@ class G5Authenticatable::InstallGenerator < Rails::Generators::Base
     ActiveRecord::Migration.next_migration_number(next_migration_number)
   end
 
-  def create_users_migration
-    filename = 'create_g5_authenticatable_users.rb'
-    migration_template filename, "db/migrate/#{filename}"
-  end
-
   def mount_engine
     route "mount G5Authenticatable::Engine => '/g5_auth'"
   end
 
   def create_initializer
-    template 'g5_authenticatable.rb', 'config/initializers/g5_authenticatable.rb'
+    template 'initializer.rb', 'config/initializers/g5_authenticatable.rb'
+  end
+
+  def create_users_migration
+    filename = 'create_g5_authenticatable_users.rb'
+    migration_template filename, "db/migrate/#{filename}"
   end
 
   def users_contact_info_migration

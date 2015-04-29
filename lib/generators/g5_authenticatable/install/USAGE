@@ -5,6 +5,7 @@ Example:
     rails generate g5_authenticatable:install
 
     This will create:
+        config/initializers/g5_authenticatable.rb
         db/migrate/create_g5_authenticatable_users.rb
         db/migrate/add_g5_authenticatable_users_contact_info.rb
         db/migrate/create_g5_authenticatable_roles.rb
