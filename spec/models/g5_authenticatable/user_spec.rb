@@ -154,4 +154,135 @@ describe G5Authenticatable::User do
       end
     end
   end
+
+  describe '.find_and_update_for_g5_oauth' do
+    subject(:updated_user) { G5Authenticatable::User.find_and_update_for_g5_oauth(auth_data) }
+
+    let(:user_attributes) do
+      FactoryGirl.attributes_for(:g5_authenticatable_user,
+                                 first_name: nil,
+                                 last_name: nil,
+                                 phone_number: nil,
+                                 title: nil,
+                                 organization_name: nil
+                                )
+    end
+    before { user }
+
+    let(:auth_data) do
+      OmniAuth::AuthHash.new({
+        'provider' => user_attributes[:provider],
+        'uid' => user_attributes[:uid],
+        'info' => {
+          'email' => updated_attributes[:email],
+          'first_name' => updated_attributes[:first_name],
+          'last_name' => updated_attributes[:last_name],
+          'phone' => updated_attributes[:phone_number]
+        },
+        'credentials' => {
+          'token' => updated_attributes[:g5_access_token],
+          'expires' => true,
+          'expires_at' => Time.now + 1000
+        },
+        'extra' => {
+          'title' => updated_attributes[:title],
+          'organization_name' => updated_attributes[:organization_name],
+          'raw_info' => {}
+        }
+      })
+    end
+
+    context 'when user info is the same' do
+      let(:updated_attributes) do
+        user_attributes.merge(g5_access_token: 'updatedtoken42')
+      end
+
+      it 'should update the access token' do
+        expect { updated_user }.to change { user.reload.g5_access_token }.to(updated_attributes[:g5_access_token])
+      end
+
+      it 'should return the updated user' do
+        expect(updated_user).to eq(user.reload)
+      end
+
+      it 'should not change the user email' do
+        expect { updated_user }.to_not change { user.reload.email }
+      end
+
+      it 'should not change the user first_name' do
+        expect { updated_user }.to_not change { user.reload.first_name }
+      end
+
+      it 'should not change the user last_name' do
+        expect { updated_user }.to_not change { user.reload.last_name }
+      end
+
+      it 'should not change the user phone_number' do
+        expect { updated_user }.to_not change { user.reload.phone_number }
+      end
+
+      it 'should not change the user title' do
+        expect { updated_user }.to_not change { user.reload.title }
+      end
+
+      it 'should not change the user organization_name' do
+        expect { updated_user }.to_not change { user.reload.organization_name }
+      end
+    end
+
+    context 'when user info has changed' do
+      let(:updated_attributes) do
+        {
+          uid: user.uid,
+          provider: user.provider,
+          g5_access_token: 'updatedtoken42',
+          first_name: 'Updated First Name',
+          last_name: 'Updated Last Name',
+          phone_number: '555.555.5555 x123',
+          title: 'Recently Promoted',
+          organization_name: 'Updated Department'
+        }
+      end
+
+      it 'should update the access token' do
+        expect { updated_user }.to change { user.reload.g5_access_token }.to(updated_attributes[:g5_access_token])
+      end
+
+      it 'should return the updated user' do
+        expect(updated_user).to eq(user.reload)
+      end
+
+      it 'should not change the uid' do
+        expect { updated_user }.to_not change { user.reload.uid }
+      end
+
+      it 'should not change the provider' do
+        expect { updated_user }.to_not change { user.reload.provider }
+      end
+
+      it 'should not change the email' do
+        expect { updated_user }.to_not change { user.reload.email }
+      end
+
+      it 'should update the first name' do
+        expect { updated_user }.to change { user.reload.first_name }.to(updated_attributes[:first_name])
+      end
+
+      it 'should update the last name' do
+        expect { updated_user }.to change { user.reload.last_name }.to(updated_attributes[:last_name])
+      end
+
+      it 'should update the phone number' do
+        expect { updated_user }.to change { user.reload.phone_number }.to(updated_attributes[:phone_number])
+      end
+
+      it 'should update the title' do
+        expect { updated_user }.to change { user.reload.title }.to(updated_attributes[:title])
+      end
+
+      it 'should update the organization_name' do
+        expect { updated_user }.to change { user.reload.organization_name }.to(updated_attributes[:organization_name])
+      end
+    end
+  end
 end
