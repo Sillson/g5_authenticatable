@@ -18,17 +18,19 @@ class G5Authenticatable::InstallGenerator < Rails::Generators::Base
   end
 
   def create_users_migration
-    filename = 'create_g5_authenticatable_users.rb'
-    migration_template filename, "db/migrate/#{filename}"
+    copy_migration('create_g5_authenticatable_users')
   end
 
   def users_contact_info_migration
-    filename = 'add_g5_authenticatable_users_contact_info.rb'
-    migration_template filename, "db/migrate/#{filename}"
+    copy_migration('add_g5_authenticatable_users_contact_info')
   end
 
   def create_roles_migration
-    filename = 'create_g5_authenticatable_roles.rb'
-    migration_template filename, "db/migrate/#{filename}"
+    copy_migration('create_g5_authenticatable_roles')
+  end
+
+  private
+  def copy_migration(name)
+    migration_template "migrate/#{name}.rb", "db/migrate/#{name}.rb"
   end
 end

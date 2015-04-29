@@ -1,5 +1,5 @@
 Description:
-    Installs the g5_authenticatable engine
+    Installs/updates the g5_authenticatable engine
 
 Example:
     rails generate g5_authenticatable:install
