@@ -287,4 +287,54 @@ describe G5Authenticatable::User do
       end
     end
   end
+
+  describe '#add_role' do
+    subject(:add_role) { user.add_role(role_name) }
+
+    context 'when role already exists' do
+      let(:role) { FactoryGirl.create(:g5_authenticatable_role) }
+      let(:role_name) { role.name }
+
+      it 'should assign a role to the user' do
+        expect { add_role }.to change { user.roles.count }.by(1)
+      end
+
+      it 'should assign the existing role' do
+        add_role
+        expect(user.roles).to include(role)
+      end
+    end
+
+    context 'when role does not exist' do
+      let(:role_name) { :some_new_role }
+
+      it 'should assign a role to the user' do
+        expect { add_role }.to change { user.roles.count }.by(1)
+      end
+
+      it 'should create the new role' do
+        add_role
+        expect(G5Authenticatable::Role.exists?(name: role_name)).to be_truthy
+      end
+    end
+  end
+
+  describe '#has_role?' do
+    subject(:has_role?) { user.has_role?(role_name) }
+    let(:role_name) { :my_role }
+
+    context 'when user has been assigned the role' do
+      before { user.add_role(role_name) }
+
+      it 'should return true' do
+        expect(has_role?).to be_truthy
+      end
+    end
+
+    context 'when user has not been assigned the role' do
+      it 'should return false' do
+        expect(has_role?).to be_falsey
+      end
+    end
+  end
 end
