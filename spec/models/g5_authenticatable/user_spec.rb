@@ -82,11 +82,16 @@ describe G5Authenticatable::User do
         'extra' => {
           'title' => new_user_attributes[:title],
           'organization_name' => new_user_attributes[:organization_name],
+          'roles' => [
+            {'name' => new_role_attributes[:name]}
+          ],
           'raw_info' => {}
         }
       })
     end
+
     let(:new_user_attributes) { FactoryGirl.attributes_for(:g5_authenticatable_user) }
+    let(:new_role_attributes) { FactoryGirl.attributes_for(:g5_authenticatable_role) }
 
     context 'when there is auth data in the session' do
       let(:session) { {'omniauth.auth' => auth_data} }
@@ -130,6 +135,10 @@ describe G5Authenticatable::User do
       it 'should set the organization_name from the session data' do
         expect(new_user.organization_name).to eq(new_user_attributes[:organization_name])
       end
+
+      it 'should assign the role from the session data' do
+        expect(new_user).to have_role(new_role_attributes[:name])
+      end
     end
 
     context 'when there is no auth data in the session' do
@@ -154,6 +163,10 @@ describe G5Authenticatable::User do
       it 'should not set the email' do
         expect(new_user.email).to be_blank
       end
+
+      it 'should not assign a role to the user' do
+        expect(new_user.roles).to be_empty
+      end
     end
   end
 
@@ -169,7 +182,12 @@ describe G5Authenticatable::User do
                                  organization_name: nil
                                 )
     end
-    before { user }
+    let(:role_name) { :my_role }
+
+    before do
+      user
+      user.add_role(role_name)
+    end
 
     let(:auth_data) do
       OmniAuth::AuthHash.new({
@@ -189,6 +207,9 @@ describe G5Authenticatable::User do
         'extra' => {
           'title' => updated_attributes[:title],
           'organization_name' => updated_attributes[:organization_name],
+          'roles' => [
+            {name: updated_role_name}
+          ],
           'raw_info' => {}
         }
       })
@@ -198,6 +219,7 @@ describe G5Authenticatable::User do
       let(:updated_attributes) do
         user_attributes.merge(g5_access_token: 'updatedtoken42')
       end
+      let(:updated_role_name) { role_name }
 
       it 'should update the access token' do
         expect { updated_user }.to change { user.reload.g5_access_token }.to(updated_attributes[:g5_access_token])
@@ -230,6 +252,10 @@ describe G5Authenticatable::User do
       it 'should not change the user organization_name' do
         expect { updated_user }.to_not change { user.reload.organization_name }
       end
+
+      it 'should not change the user roles' do
+        expect { updated_user }.to_not change { user.reload.roles }
+      end
     end
 
     context 'when user info has changed' do
@@ -245,6 +271,8 @@ describe G5Authenticatable::User do
           organization_name: 'Updated Department'
         }
       end
+
+      let(:updated_role_name) { 'super_admin' }
 
       it 'should update the access token' do
         expect { updated_user }.to change { user.reload.g5_access_token }.to(updated_attributes[:g5_access_token])
@@ -284,6 +312,14 @@ describe G5Authenticatable::User do
 
       it 'should update the organization_name' do
         expect { updated_user }.to change { user.reload.organization_name }.to(updated_attributes[:organization_name])
+      end
+
+      it 'should unassign the old role' do
+        expect(updated_user).to_not have_role(role_name)
+      end
+
+      it 'should assign the new role' do
+        expect(updated_user).to have_role(updated_role_name)
       end
     end
   end
