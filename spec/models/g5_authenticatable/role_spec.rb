@@ -14,12 +14,13 @@ describe G5Authenticatable::Role do
 
   describe '.global' do
     subject(:global) { G5Authenticatable::Role.global }
-    let!(:global_role) { FactoryGirl.create(:g5_authenticatable_role) }
+    let!(:global_role) { user.roles.first }
+    let(:user) { FactoryGirl.create(:g5_authenticatable_user) }
+
     let!(:scoped_role) do
       FactoryGirl.create(:g5_authenticatable_role,
                          resource: user)
     end
-    let(:user) { FactoryGirl.create(:g5_authenticatable_user) }
 
     it 'should match one role' do
       expect(global.count).to eq(1)

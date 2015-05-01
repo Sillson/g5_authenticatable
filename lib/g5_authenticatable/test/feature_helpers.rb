@@ -15,6 +15,11 @@ module G5Authenticatable
           extra: {
             title: user.title,
             organization_name: user.organization_name,
+            roles: [
+              user.roles.collect do |role|
+                {name: role.name}
+              end
+            ],
             raw_info: {}
           }
         }.merge(options))

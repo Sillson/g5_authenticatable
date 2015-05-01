@@ -29,4 +29,13 @@
     <h4>Organization Name:</h4>
     <%= current_user.organization_name %>
   </div>
+  <div id="roles" class="row">
+    <h4>Roles:</h4>
+    <% current_user.roles.each do |role| %>
+      <div>
+        <h5>Role Name:<h5>
+        <%= role.name %>
+      </div>
+    <% end %>
+  </div>
 <% end %>
