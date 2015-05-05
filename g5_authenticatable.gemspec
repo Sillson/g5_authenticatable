@@ -23,4 +23,5 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'devise_g5_authenticatable', '~> 0.2'
   spec.add_dependency 'g5_authenticatable_api', '~> 0.3.1'
   spec.add_dependency 'rolify', '~> 4.0'
+  spec.add_dependency 'pundit', '~> 1.0'
 end
