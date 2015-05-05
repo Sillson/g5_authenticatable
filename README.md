@@ -258,6 +258,28 @@ Authorization header, or in a request parameter named `access_token`.
 For more details, see the documentation for
 [g5_authenticatable_api](https://github.com/G5/g5_authenticatable_api).
 
+### Authorization ###
+
+#### Roles #####
+
+User roles are defined on the auth server and automatically populated in the local
+model layer when a user logs in:
+
+```ruby
+current_user.roles
+# => #<ActiveRecord::Associations::CollectionProxy [#<G5Authenticatable::Role id: 1, name: "viewer", ...>]>
+```
+
+We use [rolify](https://github.com/RolifyCommunity/rolify) for role management,
+which provides an interface for querying role assignments:
+
+```ruby
+current_user.has_role?(:editor)
+```
+
+G5 currently supports four different roles: `:super_admin`, `:admin`,
+`:editor`, and `:viewer` (the default role).
+
 ### Test Helpers ###
 
 G5 Authenticatable currently only supports [rspec-rails](https://github.com/rspec/rspec-rails).
