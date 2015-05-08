@@ -1,4 +1,4 @@
-class ApplicationPolicy
+class G5Authenticatable::BasePolicy
   attr_reader :user, :record
 
   def initialize(user, record)
