@@ -57,6 +57,8 @@ ActiveRecord::Schema.define(version: 20150509061150) do
   add_index "g5_authenticatable_users_roles", ["user_id", "role_id"], name: "index_g5_authenticatable_users_roles_on_user_id_and_role_id", using: :btree
 
   create_table "posts", force: :cascade do |t|
+    t.integer  "author_id"
+    t.string   "content"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
