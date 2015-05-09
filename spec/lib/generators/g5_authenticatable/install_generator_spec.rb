@@ -12,6 +12,7 @@ describe G5Authenticatable::InstallGenerator, type: :generator do
   before do
     prepare_destination
     setup_routes
+    setup_application_controller
     run_generator
   end
 
@@ -73,6 +74,30 @@ describe G5Authenticatable::InstallGenerator, type: :generator do
     }
   end
 
+  it 'should include pundit in the application controller' do
+    expect(destination_root).to have_structure {
+      directory 'app' do
+        directory 'controllers' do
+          file 'application_controller.rb' do
+            contains 'include Pundit'
+          end
+        end
+      end
+    }
+  end
+
+  it 'should create the default application policy' do
+    expect(destination_root).to have_structure {
+      directory 'app' do
+        directory 'policies' do
+          file 'application_policy.rb' do
+            contains 'class ApplicationPolicy < G5Authenticatable::BasePolicy'
+          end
+        end
+      end
+    }
+  end
+
   def setup_routes
     routes = <<-END
       Rails.application.routes.draw do
@@ -87,5 +112,17 @@ describe G5Authenticatable::InstallGenerator, type: :generator do
 
     FileUtils.mkdir_p(config_dir)
     File.write(File.join(config_dir, 'routes.rb'), routes)
+  end
+
+  def setup_application_controller
+    controller = <<-END
+      class ApplicationController < ActionController::Base
+        protect_from_forgery
+      end
+    END
+    controllers_dir = File.join(destination_root, 'app', 'controllers')
+
+    FileUtils.mkdir_p(controllers_dir)
+    File.write(File.join(controllers_dir, 'application_controller.rb'), controller)
   end
 end

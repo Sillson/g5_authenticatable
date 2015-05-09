@@ -29,6 +29,17 @@ class G5Authenticatable::InstallGenerator < Rails::Generators::Base
     copy_migration('create_g5_authenticatable_roles')
   end
 
+  def include_pundit
+    inject_into_file 'app/controllers/application_controller.rb',
+      after: "class ApplicationController < ActionController::Base\n" do
+      "  include Pundit\n"
+    end
+  end
+
+  def create_application_policy
+    template 'application_policy.rb', 'app/policies/application_policy.rb'
+  end
+
   private
   def copy_migration(name)
     migration_template "migrate/#{name}.rb", "db/migrate/#{name}.rb"
