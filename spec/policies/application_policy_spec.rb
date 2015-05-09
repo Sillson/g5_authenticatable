@@ -4,7 +4,7 @@ describe ApplicationPolicy do
   subject(:policy) { described_class }
 
   let(:user) { FactoryGirl.create(:g5_authenticatable_user) }
-  let(:record) { FactoryGirl.create(:g5_authenticatable_user) }
+  let(:record) { FactoryGirl.create(:post) }
 
   permissions :index? do
     it 'denies access by default' do
@@ -20,7 +20,7 @@ describe ApplicationPolicy do
     end
 
     context 'when record does not exist in scope' do
-      let(:record) { FactoryGirl.build(:g5_authenticatable_user) }
+      let(:record) { FactoryGirl.build(:post) }
 
       it 'denies access' do
         expect(policy).to_not permit(user, record)
