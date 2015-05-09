@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  resources :posts
+
   resource :home, only: [:index, :show]
 
   get '/protected_page', to: 'home#show', as: :protected_page
