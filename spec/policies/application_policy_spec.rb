@@ -51,4 +51,19 @@ describe ApplicationPolicy do
       expect(policy).to_not permit(user, record)
     end
   end
+
+  permissions :destroy? do
+    it 'denies access by default' do
+      expect(policy).to_not permit(user, record)
+    end
+  end
+
+  describe '#scope' do
+    subject(:scope) { policy.new(user, record).scope }
+
+    it 'should look up the correct scope based on the record class' do
+      post_scope = PostPolicy::Scope.new(user, record.class)
+      expect(scope).to eq(post_scope.resolve)
+    end
+  end
 end
