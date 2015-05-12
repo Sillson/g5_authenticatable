@@ -98,6 +98,16 @@ describe G5Authenticatable::InstallGenerator, type: :generator do
     }
   end
 
+  it 'should copy the static 403 error page' do
+    expect(destination_root).to have_structure {
+      directory 'public' do
+        file '403.html' do
+          contains 'Access forbidden'
+        end
+      end
+    }
+  end
+
   def setup_routes
     routes = <<-END
       Rails.application.routes.draw do

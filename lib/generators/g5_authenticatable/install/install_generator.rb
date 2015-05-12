@@ -40,6 +40,10 @@ class G5Authenticatable::InstallGenerator < Rails::Generators::Base
     template 'application_policy.rb', 'app/policies/application_policy.rb'
   end
 
+  def create_403_error_page
+    template '403.html', 'public/403.html'
+  end
+
   private
   def copy_migration(name)
     migration_template "migrate/#{name}.rb", "db/migrate/#{name}.rb"
