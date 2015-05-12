@@ -7,7 +7,7 @@ class G5Authenticatable::BasePolicy
   end
 
   def index?
-    false
+    super_admin?
   end
 
   def show?
@@ -49,5 +49,9 @@ class G5Authenticatable::BasePolicy
     def resolve
       scope
     end
+  end
+
+  def super_admin?
+    user.present? && user.has_role?(:super_admin)
   end
 end

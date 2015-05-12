@@ -1,9 +1,17 @@
 class PostsController < ApplicationController
+  before_action :authenticate_api_user!, unless: :is_navigational_format?
+  before_action :authenticate_user!, if: :is_navigational_format?
+
   before_action :set_post, only: [:show, :edit, :update, :destroy]
 
   # GET /posts
   def index
+    authorize(Post)
     @posts = Post.all
+    respond_to do |format|
+      format.html { render }
+      format.json { render json: @posts }
+    end
   end
 
   # GET /posts/1

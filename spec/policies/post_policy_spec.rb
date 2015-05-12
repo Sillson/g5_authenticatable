@@ -1,10 +1,13 @@
 require 'spec_helper'
 
 describe PostPolicy do
+  subject(:policy) { described_class }
 
-  let(:user) { User.new }
+  let(:record) { FactoryGirl.create(:post) }
 
-  subject { described_class }
+  permissions :index? do
+    it_behaves_like 'a super_admin authorizer'
+  end
 
   permissions ".scope" do
     pending "add some examples to (or delete) #{__FILE__}"
