@@ -41,4 +41,77 @@ describe 'Default role-based authorization UI' do
       end
     end
   end
+
+  describe 'New post' do
+    let(:visit_new_post) { visit_path_and_login_with(new_post_path, user) }
+
+    before { visit_new_post }
+
+    context 'when authenticated user is a super admin' do
+      let(:user) { FactoryGirl.create(:g5_authenticatable_super_admin) }
+
+      it 'renders the new post page' do
+        expect(current_path).to eq(new_post_path)
+      end
+
+      it 'renders a form that accepts post content' do
+        expect(page).to have_field('Content')
+      end
+    end
+
+    context 'when authenticated user is not a super admin' do
+      let(:user) { FactoryGirl.create(:g5_authenticatable_user) }
+
+      it 'displays an error message' do
+        expect(page).to have_content(/forbidden/i)
+      end
+
+      it 'does not render a form that accepts post content' do
+        expect(page).to_not have_field('Content')
+      end
+    end
+  end
+
+  describe 'Create post' do
+    subject(:create_post) { click_button 'Create Post' }
+
+    before do
+      visit_path_and_login_with(new_post_path, user)
+      fill_in 'Content', with: post.content
+    end
+
+    let(:post) { FactoryGirl.build(:post, author: user) }
+    let(:user) { FactoryGirl.create(:g5_authenticatable_super_admin) }
+
+    context 'when authenticated user is a super admin' do
+      it 'renders the flash message' do
+        create_post
+        expect(page).to have_content('Post was successfully created.')
+      end
+
+      it 'renders the post content' do
+        create_post
+        expect(page).to have_content(post.content)
+      end
+
+      it 'creates a post in the db' do
+        expect { create_post }.to change { Post.count }.by(1)
+      end
+    end
+
+    context 'when authenticated user is not a super admin on form submission' do
+      before do
+        user.roles.clear
+      end
+
+      it 'displays an error message' do
+        create_post
+        expect(page).to have_content(/forbidden/i)
+      end
+
+      it 'does not create a post' do
+        expect { create_post }.to_not change { Post.count }
+      end
+    end
+  end
 end

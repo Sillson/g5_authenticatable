@@ -1,4 +1,17 @@
 <p id="notice"><%= notice %></p>
 
+<div>
+  <h1>Content</h1>
+  <p><%= @post.content %></p>
+</div>
+<div>
+  <h1>Author</h1>
+  <p><%= @post.author.first_name %> <%= @post.author.last_name %></p>
+</div>
+<div>
+  <h1>Created At</h1>
+  <p><%= @post.created_at %><p>
+</div>
+
 <%= link_to 'Edit', edit_post_path(@post) %> |
 <%= link_to 'Back', posts_path %>

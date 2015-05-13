@@ -4,14 +4,14 @@ class PostsController < ApplicationController
 
   before_action :set_post, only: [:show, :edit, :update, :destroy]
 
+  respond_to :json, only: [:index, :create]
+  respond_to :html
+
   # GET /posts
   def index
     authorize(Post)
     @posts = Post.all
-    respond_to do |format|
-      format.html { render }
-      format.json { render json: @posts }
-    end
+    respond_with(@posts)
   end
 
   # GET /posts/1
@@ -21,6 +21,8 @@ class PostsController < ApplicationController
   # GET /posts/new
   def new
     @post = Post.new
+    authorize(@post)
+    respond_with(@post)
   end
 
   # GET /posts/1/edit
@@ -30,12 +32,11 @@ class PostsController < ApplicationController
   # POST /posts
   def create
     @post = Post.new(post_params)
-
+    authorize(@post)
     if @post.save
-      redirect_to @post, notice: 'Post was successfully created.'
-    else
-      render :new
+      flash[:notice] = 'Post was successfully created.'
     end
+    respond_with(@post)
   end
 
   # PATCH/PUT /posts/1
@@ -61,6 +62,6 @@ class PostsController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def post_params
-      params[:post]
+      params.require(:post).permit(:content, :author_id)
     end
 end

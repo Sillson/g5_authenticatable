@@ -15,7 +15,7 @@ class G5Authenticatable::BasePolicy
   end
 
   def create?
-    false
+    super_admin?
   end
 
   def new?

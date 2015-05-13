@@ -11,6 +11,10 @@
     </div>
   <% end %>
 
+  <%= f.label :content %>:
+  <%= f.text_field :content %>
+  <input name="post[author_id]" type="hidden" value="<%= current_user.id %>">
+
   <div class="actions">
     <%= f.submit %>
   </div>
