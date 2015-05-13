@@ -74,12 +74,12 @@ describe G5Authenticatable::InstallGenerator, type: :generator do
     }
   end
 
-  it 'should include pundit in the application controller' do
+  it 'should include authorization in the application controller' do
     expect(destination_root).to have_structure {
       directory 'app' do
         directory 'controllers' do
           file 'application_controller.rb' do
-            contains 'include Pundit'
+            contains 'include G5Authenticatable::Authorization'
           end
         end
       end

@@ -29,7 +29,7 @@ describe 'Default role-based authorization UI' do
       let(:user) { FactoryGirl.create(:g5_authenticatable_user) }
 
       it 'displays an error message' do
-        expect(page).to have_content('Forbidden')
+        expect(page).to have_content(/forbidden/i)
       end
 
       it 'does not show the first post' do
