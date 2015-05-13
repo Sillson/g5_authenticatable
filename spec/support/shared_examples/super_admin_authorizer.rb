@@ -1,8 +1,24 @@
 shared_examples_for 'a super_admin authorizer' do
-  context 'when user is not a super_admin' do
+  context 'when user is an admin' do
+    let(:user) { FactoryGirl.create(:g5_authenticatable_admin) }
+
+    it 'denies access' do
+      expect(policy).to_not permit(user, record)
+    end
+  end
+
+  context 'when user is an editor' do
+    let(:user) { FactoryGirl.create(:g5_authenticatable_editor) }
+
+    it 'denies access' do
+      expect(policy).to_not permit(user, record)
+    end
+  end
+
+  context 'when user is a viewer' do
     let(:user) { FactoryGirl.create(:g5_authenticatable_user) }
 
-    it 'denies access by default' do
+    it 'denies access' do
       expect(policy).to_not permit(user, record)
     end
   end

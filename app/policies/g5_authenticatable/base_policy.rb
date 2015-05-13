@@ -23,7 +23,7 @@ class G5Authenticatable::BasePolicy
   end
 
   def update?
-    false
+    super_admin?
   end
 
   def edit?

@@ -35,15 +35,11 @@ describe ApplicationPolicy do
   end
 
   permissions :update? do
-    it 'denies access by default' do
-      expect(policy).to_not permit(user, record)
-    end
+    it_behaves_like 'a super_admin authorizer'
   end
 
   permissions :edit? do
-    it 'denies access by default' do
-      expect(policy).to_not permit(user, record)
-    end
+    it_behaves_like 'a super_admin authorizer'
   end
 
   permissions :destroy? do

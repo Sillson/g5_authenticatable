@@ -114,4 +114,76 @@ describe 'Default role-based authorization UI' do
       end
     end
   end
+
+  describe 'Edit post' do
+    subject(:edit_post) { visit_path_and_login_with(edit_post_path(post.id), user) }
+    before { edit_post }
+
+    let(:post) { FactoryGirl.create(:post, author: user) }
+
+    context 'when authenticated user is a super admin' do
+      let(:user) { FactoryGirl.create(:g5_authenticatable_super_admin) }
+
+      it 'renders the edit post page' do
+        expect(current_path).to eq(edit_post_path(post.id))
+      end
+
+      it 'renders a form that accepts post content' do
+        expect(page).to have_field('Content', with: post.content)
+      end
+    end
+
+    context 'when authenticated user is not a super admin' do
+      let(:user) { FactoryGirl.create(:g5_authenticatable_user) }
+
+      it 'displays an error message' do
+        expect(page).to have_content(/forbidden/i)
+      end
+
+      it 'does not render a form that accepts post content' do
+        expect(page).to_not have_field('Content')
+      end
+    end
+  end
+
+  describe 'Update post' do
+    subject(:update_post) { click_button 'Update Post' }
+
+    before do
+      visit_path_and_login_with(edit_post_path(post.id), user)
+      fill_in 'Content', with: new_content
+    end
+
+    let(:post) { FactoryGirl.create(:post, author: user) }
+    let(:user) { FactoryGirl.create(:g5_authenticatable_super_admin) }
+    let(:new_content) { 'My updated post content' }
+
+    context 'when authenticated user is a super admin' do
+      it 'renders the flash message' do
+        update_post
+        expect(page).to have_content('Post was successfully updated.')
+      end
+
+      it 'renders the post content' do
+        update_post
+        expect(page).to have_content(new_content)
+      end
+    end
+
+    context 'when authenticated user is not a super admin on form submission' do
+      before do
+        user.roles.clear
+      end
+
+      it 'displays an error message' do
+        update_post
+        expect(page).to have_content(/forbidden/i)
+      end
+
+      it 'does not update post content' do
+        update_post
+        expect(page).to_not have_content(new_content)
+      end
+    end
+  end
 end

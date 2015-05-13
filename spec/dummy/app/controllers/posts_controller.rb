@@ -4,7 +4,7 @@ class PostsController < ApplicationController
 
   before_action :set_post, only: [:show, :edit, :update, :destroy]
 
-  respond_to :json, only: [:index, :create]
+  respond_to :json, only: [:index, :create, :update]
   respond_to :html
 
   # GET /posts
@@ -27,6 +27,8 @@ class PostsController < ApplicationController
 
   # GET /posts/1/edit
   def edit
+    authorize(@post)
+    respond_with(@post)
   end
 
   # POST /posts
@@ -41,11 +43,11 @@ class PostsController < ApplicationController
 
   # PATCH/PUT /posts/1
   def update
+    authorize(@post)
     if @post.update(post_params)
-      redirect_to @post, notice: 'Post was successfully updated.'
-    else
-      render :edit
+      flash[:notice] = 'Post was successfully updated.'
     end
+    respond_with(@post)
   end
 
   # DELETE /posts/1

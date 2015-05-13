@@ -69,4 +69,39 @@ describe 'Default role-based authorization API' do
       end
     end
   end
+
+  describe 'PUT /posts/:id', :auth_request do
+    subject(:update_post) do
+      put post_path(post.id), post: post_params, format: :json
+    end
+
+    let(:post_params) do
+      {content: 'some brand new content', author_id: post.author.id}
+    end
+    let(:post) { FactoryGirl.create(:post, author: user) }
+
+    context 'when user is a super_admin' do
+      let(:user) { FactoryGirl.create(:g5_authenticatable_super_admin) }
+
+      it 'returns ok' do
+        update_post
+        expect(response).to be_http_no_content
+      end
+
+      it 'updates the post' do
+        expect { update_post }.to change { post.reload.content }
+      end
+    end
+
+    context 'when user is not a super_admin' do
+      it 'returns forbidden' do
+        update_post
+        expect(response).to be_forbidden
+      end
+
+      it 'does not update the post' do
+        expect { update_post }.to_not change { post.reload.content }
+      end
+    end
+  end
 end
