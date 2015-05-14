@@ -58,4 +58,16 @@ class G5Authenticatable::BasePolicy
   def super_admin?
     user.present? && user.has_role?(:super_admin)
   end
+
+  def admin?
+    user.present? && user.has_role?(:admin)
+  end
+
+  def editor?
+    user.present? && user.has_role?(:editor)
+  end
+
+  def viewer?
+    user.present? && user.has_role?(:viewer)
+  end
 end

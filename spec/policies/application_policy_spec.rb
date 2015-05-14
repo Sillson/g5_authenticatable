@@ -90,4 +90,82 @@ describe ApplicationPolicy do
       end
     end
   end
+
+  describe '#admin?' do
+    subject(:admin?) { policy.new(user, record).admin? }
+
+    context 'when there is no user' do
+      let(:user) {}
+
+      it 'is false' do
+        expect(admin?).to eq(false)
+      end
+    end
+
+    context 'when user does not have admin role' do
+      it 'is false' do
+        expect(admin?).to eq(false)
+      end
+    end
+
+    context 'when user has the admin role' do
+      let(:user) { FactoryGirl.create(:g5_authenticatable_admin) }
+
+      it 'is true' do
+        expect(admin?).to eq(true)
+      end
+    end
+  end
+
+  describe '#editor?' do
+    subject(:editor?) { policy.new(user, record).editor? }
+
+    context 'when there is no user' do
+      let(:user) {}
+
+      it 'is false' do
+        expect(editor?).to eq(false)
+      end
+    end
+
+    context 'when user does not have editor role' do
+      it 'is false' do
+        expect(editor?).to eq(false)
+      end
+    end
+
+    context 'when user has the editor role' do
+      let(:user) { FactoryGirl.create(:g5_authenticatable_editor) }
+
+      it 'is true' do
+        expect(editor?).to eq(true)
+      end
+    end
+  end
+
+  describe '#viewer?' do
+    subject(:viewer?) { policy.new(user, record).viewer? }
+
+    context 'when there is no user' do
+      let(:user) {}
+
+      it 'is false' do
+        expect(viewer?).to eq(false)
+      end
+    end
+
+    context 'when user does not have viewer role' do
+      let(:user) { FactoryGirl.create(:g5_authenticatable_editor) }
+
+      it 'is false' do
+        expect(viewer?).to eq(false)
+      end
+    end
+
+    context 'when user has the viewer role' do
+      it 'is true' do
+        expect(viewer?).to eq(true)
+      end
+    end
+  end
 end
