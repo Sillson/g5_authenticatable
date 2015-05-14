@@ -10,7 +10,7 @@ class PostsController < ApplicationController
   # GET /posts
   def index
     authorize(Post)
-    @posts = Post.all
+    @posts = policy_scope(Post)
     respond_with(@posts)
   end
 
