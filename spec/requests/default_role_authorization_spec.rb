@@ -104,4 +104,36 @@ describe 'Default role-based authorization API' do
       end
     end
   end
+
+  describe 'DELETE /posts/:id', :auth_request do
+    subject(:delete_post) do
+      delete post_path(post.id), format: :json
+    end
+
+    let!(:post) { FactoryGirl.create(:post, author: user) }
+
+    context 'when user is a super_admin' do
+      let(:user) { FactoryGirl.create(:g5_authenticatable_super_admin) }
+
+      it 'returns ok' do
+        delete_post
+        expect(response).to be_http_no_content
+      end
+
+      it 'deletes the post' do
+        expect { delete_post }.to change { Post.count }.by(-1)
+      end
+    end
+
+    context 'when user is not a super_admin' do
+      it 'returns forbidden' do
+        delete_post
+        expect(response).to be_forbidden
+      end
+
+      it 'does not delete the post' do
+        expect { delete_post }.to_not change { Post.count }
+      end
+    end
+  end
 end

@@ -31,7 +31,7 @@ class G5Authenticatable::BasePolicy
   end
 
   def destroy?
-    false
+    super_admin?
   end
 
   def scope

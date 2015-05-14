@@ -186,4 +186,37 @@ describe 'Default role-based authorization UI' do
       end
     end
   end
+
+  describe 'Delete post' do
+    subject(:delete_post) { click_link 'Destroy' }
+
+    let!(:post) { FactoryGirl.create(:post, author: user) } 
+    let(:user) { FactoryGirl.create(:g5_authenticatable_super_admin) }
+
+    before { visit_path_and_login_with(posts_path, user) }
+
+    context 'when authenticated user is a super admin' do
+      it 'renders the flash message' do
+        delete_post
+        expect(page).to have_content('Post was successfully destroyed.')
+      end
+
+      it 'deletes the post' do
+        expect { delete_post }.to change { Post.count }.by(-1)
+      end
+    end
+
+    context 'when authenticated user is not a super admin' do
+      before { user.roles.clear }
+
+      it 'displays an error message' do
+        delete_post
+        expect(page).to have_content(/forbidden/i)
+      end
+
+      it 'does not delete the post' do
+        expect { delete_post }.to_not change { Post.count }
+      end
+    end
+  end
 end

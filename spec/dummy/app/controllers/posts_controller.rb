@@ -4,7 +4,7 @@ class PostsController < ApplicationController
 
   before_action :set_post, only: [:show, :edit, :update, :destroy]
 
-  respond_to :json, only: [:index, :create, :update]
+  respond_to :json, only: [:index, :create, :update, :destroy]
   respond_to :html
 
   # GET /posts
@@ -52,8 +52,11 @@ class PostsController < ApplicationController
 
   # DELETE /posts/1
   def destroy
-    @post.destroy
-    redirect_to posts_url, notice: 'Post was successfully destroyed.'
+    authorize(@post)
+    if @post.destroy
+      flash[:notice] = 'Post was successfully destroyed.'
+    end
+    respond_with(@post)
   end
 
   private
