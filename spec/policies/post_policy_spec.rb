@@ -9,6 +9,10 @@ describe PostPolicy do
     it_behaves_like 'a super_admin authorizer'
   end
 
+  permissions :show? do
+    it_behaves_like 'a super_admin authorizer'
+  end
+
   permissions :new? do
     it_behaves_like 'a super_admin authorizer'
   end
@@ -27,13 +31,5 @@ describe PostPolicy do
 
   permissions :destroy? do
     it_behaves_like 'a super_admin authorizer'
-  end
-
-  permissions ".scope" do
-    pending "add some examples to (or delete) #{__FILE__}"
-  end
-
-  permissions :show? do
-    pending "add some examples to (or delete) #{__FILE__}"
   end
 end

@@ -4,7 +4,7 @@ class PostsController < ApplicationController
 
   before_action :set_post, only: [:show, :edit, :update, :destroy]
 
-  respond_to :json, only: [:index, :create, :update, :destroy]
+  respond_to :json, except: [:new, :edit]
   respond_to :html
 
   # GET /posts
@@ -16,6 +16,8 @@ class PostsController < ApplicationController
 
   # GET /posts/1
   def show
+    authorize(@post)
+    respond_with(@post)
   end
 
   # GET /posts/new

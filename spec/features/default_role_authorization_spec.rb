@@ -42,6 +42,38 @@ describe 'Default role-based authorization UI' do
     end
   end
 
+  describe 'Show post' do
+    let(:show_post) { visit_path_and_login_with(post_path(post.id), user) }
+
+    let!(:post) { FactoryGirl.create(:post, author: user) }
+
+    before { show_post }
+
+    context 'when authenticated user is a super_admin' do
+      let(:user) { FactoryGirl.create(:g5_authenticatable_super_admin) }
+
+      it 'renders the show post page' do
+        expect(current_path).to eq(post_path(post.id))
+      end
+
+      it 'shows the post content' do
+        expect(page).to have_content(post.content)
+      end
+    end
+
+    context 'when authenticated user is not a super_admin' do
+      let(:user) { FactoryGirl.create(:g5_authenticatable_user) }
+
+      it 'displays an error message' do
+        expect(page).to have_content(/forbidden/i)
+      end
+
+      it 'does not show the post content' do
+        expect(page).to_not have_content(post.content)
+      end
+    end
+  end
+
   describe 'New post' do
     let(:visit_new_post) { visit_path_and_login_with(new_post_path, user) }
 

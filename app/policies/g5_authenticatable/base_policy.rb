@@ -47,7 +47,11 @@ class G5Authenticatable::BasePolicy
     end
 
     def resolve
-      scope
+      if user.has_role?(:super_admin)
+        scope
+      else
+        scope.none
+      end
     end
   end
 

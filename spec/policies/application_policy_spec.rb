@@ -11,15 +11,25 @@ describe ApplicationPolicy do
   end
 
   permissions :show? do
-    context 'when record exists in scope' do
-      it 'permits access' do
-        expect(policy).to permit(user, record)
+    context 'when user is a super_admin' do
+      let(:user) { FactoryGirl.create(:g5_authenticatable_super_admin) }
+
+      context 'when record exists in scope' do
+        it 'permits access' do
+          expect(policy).to permit(user, record)
+        end
+      end
+
+      context 'when record does not exist in scope' do
+        let(:record) { FactoryGirl.build(:post) }
+
+        it 'denies access' do
+          expect(policy).to_not permit(user, record)
+        end
       end
     end
 
-    context 'when record does not exist in scope' do
-      let(:record) { FactoryGirl.build(:post) }
-
+    context 'when user is not a super_admin' do
       it 'denies access' do
         expect(policy).to_not permit(user, record)
       end
