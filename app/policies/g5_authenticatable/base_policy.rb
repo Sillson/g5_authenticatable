@@ -38,7 +38,7 @@ class G5Authenticatable::BasePolicy
     Pundit.policy_scope!(user, record.class)
   end
 
-  class Scope
+  class BaseScope
     attr_reader :user, :scope
 
     def initialize(user, scope)
