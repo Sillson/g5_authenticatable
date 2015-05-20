@@ -15,12 +15,24 @@ describe G5Authenticatable::InstallGenerator, type: :generator do
     run_generator
   end
 
-  it 'should copy the migration' do
+  it 'should copy the create user migration' do
     expect(destination_root).to have_structure {
       directory 'db' do
         directory 'migrate' do
           migration 'create_g5_authenticatable_users' do
             contains 'class CreateG5AuthenticatableUsers < ActiveRecord::Migration'
+          end
+        end
+      end
+    }
+  end
+
+  it 'should copy the migration to add user contact info' do
+    expect(destination_root).to have_structure {
+      directory 'db' do
+        directory 'migrate' do
+          migration 'add_g5_authenticatable_users_contact_info' do
+            contains 'class AddG5AuthenticatableUsersContactInfo < ActiveRecord::Migration'
           end
         end
       end

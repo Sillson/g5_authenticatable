@@ -5,8 +5,18 @@ module G5Authenticatable
         OmniAuth.config.mock_auth[:g5] = OmniAuth::AuthHash.new({
           uid: user.uid,
           provider: 'g5',
-          info: {email: user.email},
-          credentials: {token: user.g5_access_token}
+          info: {
+            email: user.email,
+            first_name: user.first_name,
+            last_name: user.last_name,
+            phone: user.phone_number
+          },
+          credentials: {token: user.g5_access_token},
+          extra: {
+            title: user.title,
+            organization_name: user.organization_name,
+            raw_info: {}
+          }
         }.merge(options))
       end
 

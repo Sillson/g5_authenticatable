@@ -1,5 +1,8 @@
 ## Next release (TBD)
 
+* Added user attributes. Requires running `rails g g5_authenticatable:install`
+  and `rake db:migrate`
+  ([#32](https://github.com/G5/g5_authenticatable/pull/32))
 * Updated documentation around test helper dependencies and incompatibilities
   ([#30](https://github.com/G5/g5_authenticatable/pull/30))
 
