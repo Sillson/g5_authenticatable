@@ -16,6 +16,15 @@ module G5Authenticatable
                     body: {'error' => 'invalid_token',
                            'error_description' => 'The access token expired'}.to_json)
       end
+
+      def stub_auth_user_request(token_value, auth_user_data)
+        stub_request(:get, "#{ENV['G5_AUTH_ENDPOINT']}/v1/me").
+          with(headers: {'Authorization' => "Bearer #{token_value}"}).
+          to_return(status: 200,
+                    headers: {'Content-Type' => 'application/json; charset=utf-8',
+                              'Cache-Control' => 'no-cache'},
+                    body: auth_user_data.to_json)
+      end
     end
   end
 end

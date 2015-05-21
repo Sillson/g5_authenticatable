@@ -57,4 +57,17 @@ FactoryGirl.define do
   factory :g5_authenticatable_viewer_role, parent: :g5_authenticatable_role do
     name 'viewer'
   end
+
+  factory :g5_auth_user, class: 'G5AuthenticationClient::User' do
+    sequence(:id) { |n| n.to_s }
+    first_name 'Test'
+    sequence(:last_name) { |n| "User #{n}"}
+    phone_number '(555) 555-5555'
+    title 'Tester'
+    organization_name 'QA'
+
+    after(:build) do |user|
+      user.roles << G5AuthenticationClient::Role.new(name: 'admin')
+    end
+  end
 end
