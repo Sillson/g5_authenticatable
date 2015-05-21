@@ -3,36 +3,74 @@ require 'spec_helper'
 describe 'Default role-based authorization API' do
   let(:json) { JSON.parse(response.body) }
 
-  describe 'GET /posts', :auth_request do
-    subject(:get_posts) { get posts_path, format: :json }
+  describe 'GET /posts' do
+    subject(:get_posts) { get posts_path, params }
+    let(:params) { {format: :json} }
 
     let!(:post) { FactoryGirl.create(:post, author: user) }
     let!(:other_post) { FactoryGirl.create(:post) }
 
-    before { get_posts }
+    context 'when user is logged in through warden', :auth_request do
+      before { get_posts }
+      context 'when user is a super_admin' do
+        let(:user) { FactoryGirl.create(:g5_authenticatable_super_admin) }
 
-    context 'when user is a super_admin' do
-      let(:user) { FactoryGirl.create(:g5_authenticatable_super_admin) }
+        it 'returns ok' do
+          expect(response).to be_ok
+        end
 
-      it 'returns ok' do
-        expect(response).to be_ok
+        it 'includes all posts' do
+          expect(json).to contain_exactly(
+            hash_including('id' => post.id,
+                           'author_id' => post.author.id,
+                           'content' => post.content),
+            hash_including('id' => other_post.id,
+                           'author_id' => other_post.author.id,
+                           'content' => other_post.content)
+          )
+        end
       end
 
-      it 'includes all posts' do
-        expect(json).to contain_exactly(
-          hash_including('id' => post.id,
-                         'author_id' => post.author.id,
-                         'content' => post.content),
-          hash_including('id' => other_post.id,
-                         'author_id' => other_post.author.id,
-                         'content' => other_post.content)
-        )
+      context 'when user is not a super_admin' do
+        let(:user) { FactoryGirl.create(:g5_authenticatable_user) }
+
+        it 'returns forbidden' do
+          expect(response).to be_forbidden
+        end
       end
     end
 
-    context 'when user is not a super_admin' do
-      it 'returns forbidden' do
-        expect(response).to be_forbidden
+    context 'when user is logged in with a token' do
+      let(:params) { {format: :json, access_token: user.g5_access_token} }
+      before { stub_valid_access_token(user.g5_access_token) }
+
+      before { get_posts }
+
+      context 'when user is a super_admin' do
+        let(:user) { FactoryGirl.create(:g5_authenticatable_super_admin) }
+
+        it 'returns ok' do
+          expect(response).to be_ok
+        end
+
+        it 'includes all posts' do
+          expect(json).to contain_exactly(
+            hash_including('id' => post.id,
+                           'author_id' => post.author.id,
+                           'content' => post.content),
+            hash_including('id' => other_post.id,
+                           'author_id' => other_post.author.id,
+                           'content' => other_post.content)
+          )
+        end
+      end
+
+      context 'when user is not a super_admin' do
+        let(:user) { FactoryGirl.create(:g5_authenticatable_user) }
+
+        it 'returns forbidden' do
+          expect(response).to be_forbidden
+        end
       end
     end
   end

@@ -40,4 +40,23 @@ describe ::ApplicationController do
   it 'should mixin authorization error handling' do
     expect(controller).to respond_to(:user_not_authorized)
   end
+
+  describe '#current_user' do
+    subject(:current_user) { controller.current_user }
+
+    context 'when already authenticated through warden', :auth_controller do
+      it 'is the user from warden' do
+        expect(current_user).to eq(user)
+      end
+    end
+
+    context 'when authenticated with a token' do
+      before { request.params[:access_token] = user.g5_access_token }
+      let(:user) { FactoryGirl.create(:g5_authenticatable_user) }
+
+      it 'is the user that owns the token' do
+        expect(current_user).to eq(user)
+      end
+    end
+  end
 end
