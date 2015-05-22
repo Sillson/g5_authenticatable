@@ -5,6 +5,8 @@ describe G5Authenticatable::User do
   let(:user) { G5Authenticatable::User.create(user_attributes) }
   let(:user_attributes) { FactoryGirl.attributes_for(:g5_authenticatable_user) }
 
+  it { is_expected.to have_and_belong_to_many(:roles) }
+
   it 'should expose the email' do
     expect(user.email).to eq(user_attributes[:email])
   end
@@ -80,11 +82,16 @@ describe G5Authenticatable::User do
         'extra' => {
           'title' => new_user_attributes[:title],
           'organization_name' => new_user_attributes[:organization_name],
+          'roles' => [
+            {'name' => new_role_attributes[:name]}
+          ],
           'raw_info' => {}
         }
       })
     end
+
     let(:new_user_attributes) { FactoryGirl.attributes_for(:g5_authenticatable_user) }
+    let(:new_role_attributes) { FactoryGirl.attributes_for(:g5_authenticatable_role) }
 
     context 'when there is auth data in the session' do
       let(:session) { {'omniauth.auth' => auth_data} }
@@ -128,6 +135,10 @@ describe G5Authenticatable::User do
       it 'should set the organization_name from the session data' do
         expect(new_user.organization_name).to eq(new_user_attributes[:organization_name])
       end
+
+      it 'should assign the role from the session data' do
+        expect(new_user).to have_role(new_role_attributes[:name])
+      end
     end
 
     context 'when there is no auth data in the session' do
@@ -152,6 +163,10 @@ describe G5Authenticatable::User do
       it 'should not set the email' do
         expect(new_user.email).to be_blank
       end
+
+      it 'should not assign a role to the user' do
+        expect(new_user.roles).to be_empty
+      end
     end
   end
 
@@ -167,7 +182,12 @@ describe G5Authenticatable::User do
                                  organization_name: nil
                                 )
     end
-    before { user }
+    let(:role_name) { :my_role }
+
+    before do
+      user
+      user.add_role(role_name)
+    end
 
     let(:auth_data) do
       OmniAuth::AuthHash.new({
@@ -187,6 +207,9 @@ describe G5Authenticatable::User do
         'extra' => {
           'title' => updated_attributes[:title],
           'organization_name' => updated_attributes[:organization_name],
+          'roles' => [
+            {name: updated_role_name}
+          ],
           'raw_info' => {}
         }
       })
@@ -196,6 +219,7 @@ describe G5Authenticatable::User do
       let(:updated_attributes) do
         user_attributes.merge(g5_access_token: 'updatedtoken42')
       end
+      let(:updated_role_name) { role_name }
 
       it 'should update the access token' do
         expect { updated_user }.to change { user.reload.g5_access_token }.to(updated_attributes[:g5_access_token])
@@ -228,6 +252,10 @@ describe G5Authenticatable::User do
       it 'should not change the user organization_name' do
         expect { updated_user }.to_not change { user.reload.organization_name }
       end
+
+      it 'should not change the user roles' do
+        expect { updated_user }.to_not change { user.reload.roles }
+      end
     end
 
     context 'when user info has changed' do
@@ -243,6 +271,8 @@ describe G5Authenticatable::User do
           organization_name: 'Updated Department'
         }
       end
+
+      let(:updated_role_name) { 'super_admin' }
 
       it 'should update the access token' do
         expect { updated_user }.to change { user.reload.g5_access_token }.to(updated_attributes[:g5_access_token])
@@ -282,6 +312,64 @@ describe G5Authenticatable::User do
 
       it 'should update the organization_name' do
         expect { updated_user }.to change { user.reload.organization_name }.to(updated_attributes[:organization_name])
+      end
+
+      it 'should unassign the old role' do
+        expect(updated_user).to_not have_role(role_name)
+      end
+
+      it 'should assign the new role' do
+        expect(updated_user).to have_role(updated_role_name)
+      end
+    end
+  end
+
+  describe '#add_role' do
+    subject(:add_role) { user.add_role(role_name) }
+
+    context 'when role already exists' do
+      let(:role) { FactoryGirl.create(:g5_authenticatable_role) }
+      let(:role_name) { role.name }
+
+      it 'should assign a role to the user' do
+        expect { add_role }.to change { user.roles.count }.by(1)
+      end
+
+      it 'should assign the existing role' do
+        add_role
+        expect(user.roles).to include(role)
+      end
+    end
+
+    context 'when role does not exist' do
+      let(:role_name) { :some_new_role }
+
+      it 'should assign a role to the user' do
+        expect { add_role }.to change { user.roles.count }.by(1)
+      end
+
+      it 'should create the new role' do
+        add_role
+        expect(G5Authenticatable::Role.exists?(name: role_name)).to be_truthy
+      end
+    end
+  end
+
+  describe '#has_role?' do
+    subject(:has_role?) { user.has_role?(role_name) }
+    let(:role_name) { :my_role }
+
+    context 'when user has been assigned the role' do
+      before { user.add_role(role_name) }
+
+      it 'should return true' do
+        expect(has_role?).to be_truthy
+      end
+    end
+
+    context 'when user has not been assigned the role' do
+      it 'should return false' do
+        expect(has_role?).to be_falsey
       end
     end
   end

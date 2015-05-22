@@ -258,6 +258,170 @@ Authorization header, or in a request parameter named `access_token`.
 For more details, see the documentation for
 [g5_authenticatable_api](https://github.com/G5/g5_authenticatable_api).
 
+### Authorization ###
+
+#### User Roles ####
+
+User roles are defined on the auth server and automatically populated in the local
+model layer when a user logs in:
+
+```ruby
+current_user.roles
+# => #<ActiveRecord::Associations::CollectionProxy [#<G5Authenticatable::Role id: 1, name: "viewer", ...>]>
+```
+
+We use [rolify](https://github.com/RolifyCommunity/rolify) for role management,
+which provides an interface for querying role assignments:
+
+```ruby
+current_user.has_role?(:editor)
+```
+
+G5 currently supports four different roles: `:super_admin`, `:admin`,
+`:editor`, and `:viewer` (the default role).
+
+#### Policies and Scopes ####
+
+G5 Authenticatable uses [pundit](https://github.com/elabs/pundit) to encapsulate
+the authorization logic in policy objects. The pundit documentation contains a much
+more thorough explanation of how to define and use policies, but a quick overview
+is provided here.
+
+The G5 Authenticatable generator created an `app/policies/application_policy.rb`
+file in your project:
+
+```ruby
+class ApplicationPolicy < G5Authenticatable::BasePolicy
+  class Scope < BaseScope
+  end
+end
+```
+
+The `G5Authenticatable::BasePolicy` and `G5Authenticatable::BasePolicy::BaseScope`
+implement a set of default authorization rules that essentially forbids access
+to all actions on all model instances unless the user has the `:super_admin`
+role. It also provides a set of helper methods for checking user roles:
+`super_admin?`, `admin?`, `editor?`, or `viewer?`.
+
+In order to implement a custom policy for one of your application's models, you
+can create a new policy in the `app/policies` directory. For instance, if you
+have a `Widget` model, and you want to also grant permissions to update that
+model to users with `:admin` or `:editor` roles:
+
+```ruby
+# app/policies/widget_policy.rb
+
+class WidgetPolicy < ApplicationPolicy
+  def update?
+    super_admin? || admin? || editor?
+  end
+end
+```
+
+You also have access to the record being authorized, and can define rules based
+on that. For instance, if you want to restrict `Widget` deletion based on both
+user role and some flag on the `Widget` instance to be deleted:
+
+```ruby
+# app/policies/widget_policy.rb
+
+class WidgetPolicy < ApplicationPolicy
+  def destroy?
+    (super_admin? || admin?) && !record.published?
+  end
+end
+```
+
+In order to implement data-level authorization, you can define a custom scope
+within your policy. The scope `resolve` method should only return the records
+to which the current user has access. You have access to the current `user` and
+also the `scope` object (defaults to the record class). For instance, if a user
+must be the owner of a widget in order to access it, but super admins are allowed
+to access all widgets:
+
+```ruby
+# app/policies/widget_policy.rb
+
+class WidgetPolicy < ApplicationPolicy
+  class Scope < Scope
+    def resolve
+      if user.has_role?(:super_admin?)
+        scope.all
+      else
+        scope.where(owner_id: user.id)
+      end
+    end
+  end
+end
+```
+
+If you want to apply the same authorization logic across all models in your
+application, you can define them in `ApplicationPolicy` or
+`ApplicationPolicy::Scope`.
+
+#### Using Policies in Controllers ####
+
+You can use the `authorize` method in your controller to ensure that the
+current user has access to the current action on a particular model instance.
+For instance, in your controller:
+
+```ruby
+class WidgetsController < ApplicationController
+  # ...
+
+  def update
+    @widget = Widget.find(params[:id])
+    authorize(@widget)
+
+    if @widget.update_attributes(widget_params)
+      flash[:notice] = "Widget successfully updated."
+    end
+
+    respond_with(@widget)
+  end
+end
+```
+
+In this example, the `authorize` method will automatically lookup the correct policy
+and populate it with the `current_user` and the model argument, and then call the
+`update?` method on it, based on the current action name.
+
+You can directly access the policy scope to look up the records to which the
+current user has access by using the `policy_scope` method:
+
+```ruby
+class WidgetsController < ApplicationController
+  # ...
+
+  def index
+    @widgets = policy_scope(Widget)
+  end
+```
+
+In this example, the `policy_scope` method will automatically look up the
+`WidgetPolicy::Scope`, populate it with the current user and `Widget` record
+class, and call the scope `resolve` method to retrieve the results.
+
+#### Using Policies in Views ####
+
+Sometimes, you want to be able to access authorization logic inside Rails views.
+For instance, you may want to hide the link to edit a record if the user does
+not have access to update that record. In these cases, you can use the `policy`
+method to lookup the instance of the policy directly:
+
+```erb
+<% if policy(@widget).update? %>
+  <%= link_to 'Edit', edit_widget_path(@widget) %>
+<% end %>
+```
+
+You can also call the `policy_scope` method inside views.
+
+If you are not rendering your views within your Rails application (for
+instance, if you are using an Ember front-end), then you will have to build
+your own API for querying policy information in order to access this
+functionality directly in your view.
+
 ### Test Helpers ###
 
 G5 Authenticatable currently only supports [rspec-rails](https://github.com/rspec/rspec-rails).

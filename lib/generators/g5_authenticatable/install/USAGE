@@ -1,12 +1,17 @@
 Description:
-    Installs the g5_authenticatable engine
+    Installs/updates the g5_authenticatable engine
 
 Example:
     rails generate g5_authenticatable:install
 
     This will create:
+        app/policies/application_policy.rb
+        config/initializers/g5_authenticatable.rb
         db/migrate/create_g5_authenticatable_users.rb
         db/migrate/add_g5_authenticatable_users_contact_info.rb
+        db/migrate/create_g5_authenticatable_roles.rb
+        public/403.html
 
     This will modify:
+        app/controllers/application_controller.rb
         config/routes.rb

@@ -28,4 +28,16 @@ describe ::ApplicationController do
 
     it_should_behave_like 'a secure controller'
   end
+
+  it 'should mixin pundit authorization' do
+    expect(controller).to respond_to(:authorize)
+  end
+
+  it 'should mixin pundit scoping' do
+    expect(controller).to respond_to(:policy_scope)
+  end
+
+  it 'should mixin authorization error handling' do
+    expect(controller).to respond_to(:user_not_authorized)
+  end
 end

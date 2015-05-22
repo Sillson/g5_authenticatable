@@ -9,7 +9,6 @@ ENV["RAILS_ENV"] ||= 'test'
 require File.expand_path("../dummy/config/environment", __FILE__)
 
 require 'rspec/rails'
-require 'rspec/autorun'
 require 'capybara/rspec'
 require 'webmock/rspec'
 require 'g5_authenticatable/rspec'
@@ -45,8 +44,6 @@ RSpec.configure do |config|
   # the seed, which is printed after each run.
   #     --seed 1234
   config.order = 'random'
-
-  config.treat_symbols_as_metadata_keys_with_true_values = true
 
   config.infer_spec_type_from_file_location!
 

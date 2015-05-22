@@ -12,8 +12,8 @@ gem 'pg'
 gem 'grape'
 
 group :test, :development do
-  gem 'rspec-rails', '~> 2.99'
-  gem 'pry'
+  gem 'rspec-rails', '~> 3.1'
+  gem 'pry-byebug'
   gem 'dotenv-rails'
   gem 'web-console', '~> 2.0'
 end

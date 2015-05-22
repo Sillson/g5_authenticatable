@@ -28,6 +28,7 @@ describe 'Signing in' do
           extra: {
             title: updated_title,
             organization_name: updated_organization_name,
+            roles: [{name: updated_role.name}],
             raw_info: {}
           }
         })
@@ -39,6 +40,7 @@ describe 'Signing in' do
       let(:updated_title) { "Updated #{user.title}" }
       let(:updated_organization_name) { "Updated #{user.organization_name}" }
       let(:updated_access_token) { "updated-#{user.g5_access_token}-123" }
+      let(:updated_role) { FactoryGirl.create(:g5_authenticatable_super_admin_role) }
 
       it 'should sign in the user successfully' do
         login
@@ -88,6 +90,17 @@ describe 'Signing in' do
         login
         expect(page).to have_content(updated_access_token)
       end
+
+      it 'should assign the updated role' do
+        login
+        expect(page).to have_content(updated_role.name)
+      end
+
+      it 'should unassign the previous role' do
+        old_role = user.roles.first
+        login
+        expect(page).to_not have_content(old_role.name)
+      end
     end
 
     context 'when user does not exist locally' do
@@ -110,12 +123,14 @@ describe 'Signing in' do
           extra: {
             title: user_attributes[:title],
             organization_name: user_attributes[:organization_name],
+            roles: [{name: role_attributes[:name]}],
             raw_info: {}
           }
         })
       end
 
       let(:user_attributes) { FactoryGirl.attributes_for(:g5_authenticatable_user) }
+      let(:role_attributes) { FactoryGirl.attributes_for(:g5_authenticatable_editor_role) }
 
       it 'should sign in the user successfully' do
         login
@@ -164,6 +179,11 @@ describe 'Signing in' do
       it 'should save the user organization_name' do
         login
         expect(page).to have_content(user_attributes[:organization_name])
+      end
+
+      it 'should save the user role' do
+        login
+        expect(page).to have_content(role_attributes[:name])
       end
     end
   end
