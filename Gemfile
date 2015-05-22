@@ -5,6 +5,9 @@ source 'https://rubygems.org'
 # development dependencies will be added by default to the :development group.
 gemspec
 
+gem 'g5_authenticatable_api', path:'/Users/jonathansamples/projects/g5_authenticatable_api'
+gem 'devise_g5_authenticatable', path:'/Users/jonathansamples/projects/devise_g5_authenticatable'
+
 # Gems used by the dummy application
 gem 'rails', '4.2.0'
 gem 'jquery-rails'
