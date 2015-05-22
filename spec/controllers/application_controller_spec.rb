@@ -51,11 +51,38 @@ describe ::ApplicationController do
     end
 
     context 'when authenticated with a token' do
-      before { request.params[:access_token] = user.g5_access_token }
-      let(:user) { FactoryGirl.create(:g5_authenticatable_user) }
+      let(:auth_user) { FactoryGirl.build_stubbed(:g5_auth_user, id: user.uid) }
+      before { stub_valid_auth_user(token_value, auth_user)}
+      let(:token_value) { user.g5_access_token }
 
-      it 'is the user that owns the token' do
-        expect(current_user).to eq(user)
+      context 'in the request params' do
+        before { request.params[:access_token] = token_value }
+
+        context 'when the user exists locally' do
+          let(:user) { FactoryGirl.create(:g5_authenticatable_user) }
+
+          it 'is the user that owns the token' do
+            expect(current_user).to eq(user)
+          end
+        end
+
+        context 'when the user does not exist locally' do
+          let(:user) { FactoryGirl.build_stubbed(:g5_authenticatable_user) }
+
+          it 'creates the user locally' do
+            current_user
+            local_user = G5Authenticatable::User.find_by_provider_and_uid(user.provider, user.uid)
+            expect(current_user).to eq(local_user)
+          end
+        end
+      end
+
+      context 'in the request headers' do
+        let(:user) { FactoryGirl.create(:g5_authenticatable_user) }
+
+        it 'is the local user that owns the token' do
+          expect(current_user).to eq(user)
+        end
       end
     end
   end
