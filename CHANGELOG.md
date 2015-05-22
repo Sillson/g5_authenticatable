@@ -1,6 +1,6 @@
 ## v0.5.0 (2015-05-21)
 
-* Added user roles. Requires running `rails g5 g5_authenticatable:install` and
+* Added user roles. Requires running `rails g g5_authenticatable:install` and
   `rake db:migrate`
   ([#33](https://github.com/G5/g5_authenticatable/pull/33))
 * Added user attributes. Requires running `rails g g5_authenticatable:install`
