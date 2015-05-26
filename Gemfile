@@ -7,6 +7,7 @@ gemspec
 
 gem 'g5_authenticatable_api', path:'/Users/jonathansamples/projects/g5_authenticatable_api'
 gem 'devise_g5_authenticatable', path:'/Users/jonathansamples/projects/devise_g5_authenticatable'
+gem 'omniauth-g5', path:'/Users/jonathansamples/projects/omniauth-g5'
 
 # Gems used by the dummy application
 gem 'rails', '4.2.0'
