@@ -28,7 +28,7 @@ describe 'Signing in' do
           extra: {
             title: updated_title,
             organization_name: updated_organization_name,
-            roles: [{name: updated_role.name}],
+            roles: [{name: updated_role.name, type: 'GLOBAL', urn: nil}],
             raw_info: {}
           }
         })
@@ -123,7 +123,7 @@ describe 'Signing in' do
           extra: {
             title: user_attributes[:title],
             organization_name: user_attributes[:organization_name],
-            roles: [{name: role_attributes[:name]}],
+            roles: [{name: role_attributes[:name], type: 'GLOBAL', urn: nil}],
             raw_info: {}
           }
         })

@@ -16,7 +16,7 @@ module G5Authenticatable
             title: user.title,
             organization_name: user.organization_name,
             roles: user.roles.collect do |role|
-              {name: role.name}
+              {name: role.name, type: 'GLOBAL', urn: nil}
             end,
             raw_info: {}
           }

@@ -64,30 +64,31 @@ describe G5Authenticatable::User do
 
     let(:params) { Hash.new }
     let(:auth_data) do
-      OmniAuth::AuthHash.new({
-        'provider' => new_user_attributes[:provider],
-        'uid' => new_user_attributes[:uid],
-        'info' => {
-          'email' => new_user_attributes[:email],
-          'name' => "#{new_user_attributes[:first_name]} #{new_user_attributes[:last_name]}",
-          'first_name' => new_user_attributes[:first_name],
-          'last_name' => new_user_attributes[:last_name],
-          'phone' => new_user_attributes[:phone_number]
-        },
-        'credentials' => {
-          'token' => new_user_attributes[:g5_access_token],
-          'expires' => true,
-          'expires_at' => Time.now + 1000
-        },
-        'extra' => {
-          'title' => new_user_attributes[:title],
-          'organization_name' => new_user_attributes[:organization_name],
-          'roles' => [
-            {'name' => new_role_attributes[:name]}
-          ],
-          'raw_info' => {}
-        }
-      })
+      OmniAuth::AuthHash.new(
+        {
+          'provider' => new_user_attributes[:provider],
+          'uid' => new_user_attributes[:uid],
+          'info' => {
+            'email' => new_user_attributes[:email],
+            'name' => "#{new_user_attributes[:first_name]} #{new_user_attributes[:last_name]}",
+            'first_name' => new_user_attributes[:first_name],
+            'last_name' => new_user_attributes[:last_name],
+            'phone' => new_user_attributes[:phone_number]
+          },
+          'credentials' => {
+            'token' => new_user_attributes[:g5_access_token],
+            'expires' => true,
+            'expires_at' => Time.now + 1000
+          },
+          'extra' => {
+            'title' => new_user_attributes[:title],
+            'organization_name' => new_user_attributes[:organization_name],
+            'roles' => [
+              {'name' => new_role_attributes[:name], 'type' => 'GLOBAL', 'urn' => nil}
+            ],
+            'raw_info' => {}
+          }
+        })
     end
 
     let(:new_user_attributes) { FactoryGirl.attributes_for(:g5_authenticatable_user) }
@@ -180,7 +181,7 @@ describe G5Authenticatable::User do
                                  phone_number: nil,
                                  title: nil,
                                  organization_name: nil
-                                )
+      )
     end
     let(:role_name) { :my_role }
 
@@ -190,29 +191,30 @@ describe G5Authenticatable::User do
     end
 
     let(:auth_data) do
-      OmniAuth::AuthHash.new({
-        'provider' => user_attributes[:provider],
-        'uid' => user_attributes[:uid],
-        'info' => {
-          'email' => updated_attributes[:email],
-          'first_name' => updated_attributes[:first_name],
-          'last_name' => updated_attributes[:last_name],
-          'phone' => updated_attributes[:phone_number]
-        },
-        'credentials' => {
-          'token' => updated_attributes[:g5_access_token],
-          'expires' => true,
-          'expires_at' => Time.now + 1000
-        },
-        'extra' => {
-          'title' => updated_attributes[:title],
-          'organization_name' => updated_attributes[:organization_name],
-          'roles' => [
-            {name: updated_role_name}
-          ],
-          'raw_info' => {}
-        }
-      })
+      OmniAuth::AuthHash.new(
+        {
+          'provider' => user_attributes[:provider],
+          'uid' => user_attributes[:uid],
+          'info' => {
+            'email' => updated_attributes[:email],
+            'first_name' => updated_attributes[:first_name],
+            'last_name' => updated_attributes[:last_name],
+            'phone' => updated_attributes[:phone_number]
+          },
+          'credentials' => {
+            'token' => updated_attributes[:g5_access_token],
+            'expires' => true,
+            'expires_at' => Time.now + 1000
+          },
+          'extra' => {
+            'title' => updated_attributes[:title],
+            'organization_name' => updated_attributes[:organization_name],
+            'roles' => [
+              {name: updated_role_name, type: 'GLOBAL', urn: nil}
+            ],
+            'raw_info' => {}
+          }
+        })
     end
 
     context 'when user info is the same' do
@@ -373,4 +375,45 @@ describe G5Authenticatable::User do
       end
     end
   end
+
+  # TODO: Implement these tests once we have a valid resource to test against
+  # describe '#update_roles_from_auth' do
+  #   before do
+  #     user.roles = []
+  #     user.save!
+  #   end
+  #   let(:user2) { G5Authenticatable::User.create(user_attributes) }
+  #   let(:user_attributes2) { FactoryGirl.attributes_for(:g5_authenticatable_user) }
+  #
+  #   context 'when user does not have roles from auth' do
+  #
+  #     let(:auth_data) do
+  #       OmniAuth::AuthHash.new(
+  #         {
+  #           'provider' => user_attributes[:provider],
+  #           'uid' => user_attributes[:uid],
+  #           'info' => {
+  #             'email' => updated_attributes[:email],
+  #             'first_name' => updated_attributes[:first_name],
+  #             'last_name' => updated_attributes[:last_name],
+  #             'phone' => updated_attributes[:phone_number]
+  #           },
+  #           'credentials' => {
+  #             'token' => updated_attributes[:g5_access_token],
+  #             'expires' => true,
+  #             'expires_at' => Time.now + 1000
+  #           },
+  #           'extra' => {
+  #             'title' => updated_attributes[:title],
+  #             'organization_name' => updated_attributes[:organization_name],
+  #             'roles' => [
+  #               {name: 'admin', type: 'GLOBAL', urn: nil},
+  #               {name: 'viewer', type: 'G5Authenticatable::User', user2.}
+  #             ],
+  #             'raw_info' => {}
+  #           }
+  #         })
+  #     end
+  #   end
+  # end
 end
