@@ -1,3 +1,12 @@
+## v0.5.1 (TBD)
+
+* Upgraded dependency on
+  [devise_g5_authenticatable](https://github.com/devise_g5_authenticatable) to
+  pick up compatibility fixes for devise v3.5.1
+  ([#34](https://github.com/G5/g5_authenticatable/issues/34))
+* Removed custom `G5Authenticatable::FailureApp`, as the fix to devise itself
+  was released ([#25](https://github.com/G5/g5_authenticatable/issues/25))
+
 ## v0.5.0 (2015-05-21)
 
 * Added user roles. Requires running `rails g g5_authenticatable:install` and

@@ -236,7 +236,7 @@ Devise.setup do |config|
   # change the failure app, you can configure them inside the config.warden block.
   #
   config.warden do |manager|
-    manager.failure_app = G5Authenticatable::FailureApp
+    # Add custom warden configuration here
   end
 
 
