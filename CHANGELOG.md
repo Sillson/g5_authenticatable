@@ -1,4 +1,4 @@
-## v0.5.1 (TBD)
+## v0.5.1 (2015-06-01)
 
 * Upgraded dependency on
   [devise_g5_authenticatable](https://github.com/devise_g5_authenticatable) to
