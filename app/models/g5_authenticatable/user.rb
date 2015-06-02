@@ -32,7 +32,19 @@ module G5Authenticatable
 
     def update_roles_from_auth(auth_data)
       roles.clear
-      auth_data.extra.roles.each { |role| add_role(role.name) }
+      auth_data.extra.roles.each do |role|
+        if(role.type == 'GLOBAL')
+          add_role(role.name)
+        else
+          begin
+            the_class = Object.const_get(role.type)
+            resource = the_class.where(urn: role.urn).first
+            add_role(role.name, resource)
+          rescue => e
+            Rails.logger.error(e)
+          end
+        end
+      end
     end
 
     private
@@ -45,5 +57,7 @@ module G5Authenticatable
         organization_name: auth_data.extra.organization_name
       }
     end
+
+
   end
 end
