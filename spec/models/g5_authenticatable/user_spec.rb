@@ -376,44 +376,115 @@ describe G5Authenticatable::User do
     end
   end
 
-  # TODO: Implement these tests once we have a valid resource to test against
-  # describe '#update_roles_from_auth' do
-  #   before do
-  #     user.roles = []
-  #     user.save!
-  #   end
-  #   let(:user2) { G5Authenticatable::User.create(user_attributes) }
-  #   let(:user_attributes2) { FactoryGirl.attributes_for(:g5_authenticatable_user) }
-  #
-  #   context 'when user does not have roles from auth' do
-  #
-  #     let(:auth_data) do
-  #       OmniAuth::AuthHash.new(
-  #         {
-  #           'provider' => user_attributes[:provider],
-  #           'uid' => user_attributes[:uid],
-  #           'info' => {
-  #             'email' => updated_attributes[:email],
-  #             'first_name' => updated_attributes[:first_name],
-  #             'last_name' => updated_attributes[:last_name],
-  #             'phone' => updated_attributes[:phone_number]
-  #           },
-  #           'credentials' => {
-  #             'token' => updated_attributes[:g5_access_token],
-  #             'expires' => true,
-  #             'expires_at' => Time.now + 1000
-  #           },
-  #           'extra' => {
-  #             'title' => updated_attributes[:title],
-  #             'organization_name' => updated_attributes[:organization_name],
-  #             'roles' => [
-  #               {name: 'admin', type: 'GLOBAL', urn: nil},
-  #               {name: 'viewer', type: 'G5Authenticatable::User', user2.}
-  #             ],
-  #             'raw_info' => {}
-  #           }
-  #         })
-  #     end
-  #   end
-  # end
+  describe '#update_roles_from_auth' do
+    before do
+      user.roles = []
+      user.save!
+    end
+
+    let(:user2) { G5Authenticatable::User.create(user_attributes) }
+    let(:user_attributes2) { FactoryGirl.attributes_for(:g5_authenticatable_user) }
+    let(:mock_urn) { 'mock_urn' }
+
+    class MockResource
+      attr_accessor :urn, :id
+      def initialize(urn)
+        @urn = urn
+        @id = 1
+      end
+      def self.where(params)
+        MockResourceList.new(params[:urn])
+      end
+    end
+    class MockResourceList
+      def initialize(urn)
+        @urn = urn
+      end
+      def first
+        MockResource.new(@urn)
+      end
+    end
+
+    let(:auth_data) do
+      OmniAuth::AuthHash.new(
+        {
+          'provider' => user_attributes[:provider],
+          'uid' => user_attributes[:uid],
+          'info' => {
+            'email' => user_attributes[:email],
+            'first_name' => user_attributes[:first_name],
+            'last_name' => user_attributes[:last_name],
+            'phone' => user_attributes[:phone_number]
+          },
+          'credentials' => {
+            'token' => user_attributes[:g5_access_token],
+            'expires' => true,
+            'expires_at' => Time.now + 1000
+          },
+          'extra' => {
+            'title' => user_attributes[:title],
+            'organization_name' => user_attributes[:organization_name],
+            'roles' => roles,
+            'raw_info' => {}
+          }
+        })
+    end
+
+    context 'with global role' do
+      let(:roles) { [
+        {name: 'admin', type: 'GLOBAL', urn: nil}
+      ] }
+
+      it 'will add a global role' do
+        expect{ user.update_roles_from_auth(auth_data) }.to change{ user.roles.length }.from(0).to(1)
+        expect(user.roles.first.name).to eq('admin')
+        expect(user.roles.first.resource).to be_nil
+      end
+    end
+
+    context 'with a scoped role' do
+      let(:roles) { [
+        {name: 'viewer', type: 'MockResource', urn: mock_urn}
+      ] }
+
+      it 'will add a scoped role' do
+        expect{ user.update_roles_from_auth(auth_data) }.to change{ user.roles.length }.from(0).to(1)
+        expect(user.roles.first.name).to eq('viewer')
+        expect(user.roles.first.resource_id).to eq(1)
+        expect(user.roles.first.resource_type).to eq('MockResource')
+      end
+    end
+
+    context 'with a more than 1 role' do
+      let(:roles) { [
+        {name: 'viewer', type: 'MockResource', urn: mock_urn},
+        {name: 'admin', type: 'GLOBAL', urn: nil}
+      ] }
+
+      it 'will add a scoped role', focus: true do
+        expect{ user.update_roles_from_auth(auth_data) }.to change{ user.roles.length }.from(0).to(2)
+      end
+    end
+    context 'with 0 roles' do
+      let(:roles) { [] }
+
+      it 'will add a scoped role', focus: true do
+        expect{ user.update_roles_from_auth(auth_data) }.to_not change{ user.roles.length }.from(0)
+      end
+    end
+
+    context 'with a bad role type' do
+      let(:roles) { [
+        {name: 'viewer', type: 'MockResource', urn: mock_urn},
+        {name: 'viewer', type: 'BadResource', urn: mock_urn}
+      ] }
+
+      it 'will skip the bad role' do
+        expect{ user.update_roles_from_auth(auth_data) }.to change{ user.roles.length }.from(0).to(1)
+        expect(user.roles.first.name).to eq('viewer')
+        expect(user.roles.first.resource_id).to eq(1)
+        expect(user.roles.first.resource_type).to eq('MockResource')
+      end
+    end
+  end
 end
