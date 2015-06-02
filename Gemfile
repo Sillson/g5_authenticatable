@@ -27,6 +27,7 @@ group :test do
   gem 'shoulda-matchers', '~> 2.6'
   gem 'generator_spec'
   gem 'rspec-http', require: 'rspec/http'
+  gem 'rspec-activemodel-mocks'
 end
 
 # Declare any dependencies that are still in development here instead of in

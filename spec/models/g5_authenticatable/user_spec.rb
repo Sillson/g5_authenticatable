@@ -386,23 +386,13 @@ describe G5Authenticatable::User do
     let(:user_attributes2) { FactoryGirl.attributes_for(:g5_authenticatable_user) }
     let(:mock_urn) { 'mock_urn' }
 
-    class MockResource
-      attr_accessor :urn, :id
-      def initialize(urn)
-        @urn = urn
-        @id = 1
-      end
-      def self.where(params)
-        MockResourceList.new(params[:urn])
-      end
-    end
-    class MockResourceList
-      def initialize(urn)
-        @urn = urn
-      end
-      def first
-        MockResource.new(@urn)
-      end
+
+    let(:mock_resource_class) { Class.new }
+    before { stub_const('MockResource', mock_resource_class) }
+
+    let(:mock_resource) { stub_model(mock_resource_class, urn: mock_urn) }
+    before do
+      allow(mock_resource_class).to receive(:where).with(urn: mock_urn).and_return([mock_resource])
     end
 
     let(:auth_data) do
@@ -450,7 +440,7 @@ describe G5Authenticatable::User do
       it 'will add a scoped role' do
         expect{ user.update_roles_from_auth(auth_data) }.to change{ user.roles.length }.from(0).to(1)
         expect(user.roles.first.name).to eq('viewer')
-        expect(user.roles.first.resource_id).to eq(1)
+        expect(user.roles.first.resource_id).to eq(mock_resource.id)
         expect(user.roles.first.resource_type).to eq('MockResource')
       end
     end
@@ -461,14 +451,14 @@ describe G5Authenticatable::User do
         {name: 'admin', type: 'GLOBAL', urn: nil}
       ] }
 
-      it 'will add a scoped role', focus: true do
+      it 'will add a scoped role' do
         expect{ user.update_roles_from_auth(auth_data) }.to change{ user.roles.length }.from(0).to(2)
       end
     end
     context 'with 0 roles' do
       let(:roles) { [] }
 
-      it 'will add a scoped role', focus: true do
+      it 'will add a scoped role' do
         expect{ user.update_roles_from_auth(auth_data) }.to_not change{ user.roles.length }.from(0)
       end
     end
@@ -482,7 +472,7 @@ describe G5Authenticatable::User do
       it 'will skip the bad role' do
         expect{ user.update_roles_from_auth(auth_data) }.to change{ user.roles.length }.from(0).to(1)
         expect(user.roles.first.name).to eq('viewer')
-        expect(user.roles.first.resource_id).to eq(1)
+        expect(user.roles.first.resource_id).to eq(mock_resource.id)
         expect(user.roles.first.resource_type).to eq('MockResource')
       end
     end
