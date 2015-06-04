@@ -47,6 +47,10 @@ module G5Authenticatable
       end
     end
 
+    def clients
+      G5Updatable::ClientPolicy::Scope.new(user, G5Updatable::Client).resolve
+    end
+
     private
     def self.extended_auth_attributes(auth_data)
       {
@@ -57,6 +61,7 @@ module G5Authenticatable
         organization_name: auth_data.extra.organization_name
       }
     end
+
 
 
   end

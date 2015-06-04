@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150509061150) do
+ActiveRecord::Schema.define(version: 20150603224036) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -55,6 +55,33 @@ ActiveRecord::Schema.define(version: 20150509061150) do
   end
 
   add_index "g5_authenticatable_users_roles", ["user_id", "role_id"], name: "index_g5_authenticatable_users_roles_on_user_id_and_role_id", using: :btree
+
+  create_table "g5_updatable_clients", force: :cascade do |t|
+    t.string   "uid"
+    t.string   "urn"
+    t.json     "properties"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "name"
+  end
+
+  add_index "g5_updatable_clients", ["name"], name: "index_g5_updatable_clients_on_name", using: :btree
+  add_index "g5_updatable_clients", ["uid"], name: "index_g5_updatable_clients_on_uid", using: :btree
+  add_index "g5_updatable_clients", ["urn"], name: "index_g5_updatable_clients_on_urn", using: :btree
+
+  create_table "g5_updatable_locations", force: :cascade do |t|
+    t.string   "uid"
+    t.string   "urn"
+    t.string   "client_uid"
+    t.json     "properties"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "name"
+  end
+
+  add_index "g5_updatable_locations", ["name"], name: "index_g5_updatable_locations_on_name", using: :btree
+  add_index "g5_updatable_locations", ["uid"], name: "index_g5_updatable_locations_on_uid", using: :btree
+  add_index "g5_updatable_locations", ["urn"], name: "index_g5_updatable_locations_on_urn", using: :btree
 
   create_table "posts", force: :cascade do |t|
     t.integer  "author_id"

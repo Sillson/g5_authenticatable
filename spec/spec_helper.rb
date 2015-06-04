@@ -12,6 +12,8 @@ require 'rspec/rails'
 require 'capybara/rspec'
 require 'webmock/rspec'
 require 'g5_authenticatable/rspec'
+require 'g5_updatable/rspec'
+require 'g5_updatable/factories'
 
 Rails.backtrace_cleaner.remove_silencers!
 
@@ -44,6 +46,13 @@ RSpec.configure do |config|
   # the seed, which is printed after each run.
   #     --seed 1234
   config.order = 'random'
+
+  # These two settings work together to allow you to limit a spec run
+  # to individual examples or groups you care about by tagging them with
+  # `:focus` metadata. When nothing is tagged with `:focus`, all examples
+  # get run.
+  config.filter_run :focus
+  config.run_all_when_everything_filtered = true
 
   config.infer_spec_type_from_file_location!
 

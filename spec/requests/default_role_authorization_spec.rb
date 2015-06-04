@@ -19,14 +19,17 @@ describe 'Default role-based authorization API' do
       end
 
       it 'includes all posts' do
-        expect(json).to contain_exactly(
-          hash_including('id' => post.id,
-                         'author_id' => post.author.id,
-                         'content' => post.content),
-          hash_including('id' => other_post.id,
-                         'author_id' => other_post.author.id,
-                         'content' => other_post.content)
-        )
+        expected = {
+          'posts'=> [
+            hash_including('id' => post.id,
+                           'author_id' => post.author.id,
+                           'content' => post.content),
+            hash_including('id' => other_post.id,
+                           'author_id' => other_post.author.id,
+                           'content' => other_post.content)
+          ]
+        }
+        expect(json).to include(expected)
       end
     end
 

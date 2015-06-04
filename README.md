@@ -280,6 +280,11 @@ current_user.has_role?(:editor)
 G5 currently supports four different roles: `:super_admin`, `:admin`,
 `:editor`, and `:viewer` (the default role).
 
+Two convenience methods have been added to the `G5Authenticatable::User`:
+
+* `user.clients` will return a list of clients that the user has any access to. Will return all clients if the user has a global role
+* `user.client_roles` will return a list of roles that relate directly to a client
+
 #### Policies and Scopes ####
 
 G5 Authenticatable uses [pundit](https://github.com/elabs/pundit) to encapsulate

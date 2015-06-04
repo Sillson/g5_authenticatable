@@ -477,4 +477,5 @@ describe G5Authenticatable::User do
       end
     end
   end
+  
 end

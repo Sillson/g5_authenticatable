@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  mount G5Updatable::Engine => '/g5_updatable'
   resources :posts
 
   resource :home, only: [:index, :show]
