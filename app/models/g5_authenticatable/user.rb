@@ -47,6 +47,23 @@ module G5Authenticatable
       end
     end
 
+    def clients
+      return G5Updatable::Client.all if has_global_role
+      G5Updatable::Client.where(id: client_roles.map(&:resource_id))
+    end
+
+    def client_roles
+      G5Authenticatable::Role.joins('INNER JOIN g5_updatable_clients ON g5_updatable_clients.id = g5_authenticatable_roles.resource_id')
+        .where('g5_authenticatable_roles.resource_type = ?', G5Updatable::Client.name)
+    end
+
+    def has_global_role
+      has_role?(:admin) ||
+        has_role?(:super_admin) ||
+        has_role?(:editor) ||
+        has_role?(:viewer)
+    end
+
     private
     def self.extended_auth_attributes(auth_data)
       {
@@ -57,6 +74,7 @@ module G5Authenticatable
         organization_name: auth_data.extra.organization_name
       }
     end
+
 
 
   end

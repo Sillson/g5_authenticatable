@@ -2,6 +2,7 @@ require 'g5_authenticatable/engine'
 
 require 'devise_g5_authenticatable'
 require 'g5_authenticatable_api'
+require 'g5_updatable'
 
 module G5Authenticatable
   # When enabled, access tokens are always validated against the auth
