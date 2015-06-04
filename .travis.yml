@@ -12,3 +12,5 @@ before_script:
 env:
   global:
     - DEVISE_SECRET_KEY=foo
+addons:
+  postgresql: "9.2"
