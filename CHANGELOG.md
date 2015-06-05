@@ -1,3 +1,14 @@
+## v0.7.0 (2015-06-04)
+
+* Add convenience methods to `G5Authenticatable::User`, as well as a
+  `G5Updatable::ClientPolicy` for authorizing access to clients based on roles
+  ([#37](https://github.com/G5/g5_authenticatable/pull/37))
+
+## v0.6.0 (2015-06-02)
+
+* Add support for resource-scoped roles
+  ([#35](https://github.com/G5/g5_authenticatable/pull/35))
+
 ## v0.5.1 (2015-06-01)
 
 * Upgraded dependency on
