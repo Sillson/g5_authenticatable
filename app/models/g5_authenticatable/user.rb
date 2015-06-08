@@ -48,7 +48,7 @@ module G5Authenticatable
     end
 
     def clients
-      G5Updatable::ClientPolicy::Scope.new(user, G5Updatable::Client).resolve
+      G5Updatable::ClientPolicy::Scope.new(self, G5Updatable::Client).resolve
     end
 
     private
