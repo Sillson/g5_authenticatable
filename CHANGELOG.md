@@ -1,3 +1,8 @@
+## v0.7.4.beta (2015-12-03)
+
+* Adds Impersonate (Assume) Devise Strategy and Concern to handle access to session stored values
+* Handles the ability and rules to impersonate a user providing his unique ID
+
 ## v0.7.3 (2015-11-30)
 * Upgrade to devise_g5_authenticatable to fix regression bug https://github.com/G5/devise_g5_authenticatable/pull/23
 * Upgrade to omniauth_g5 to fix regression bug https://github.com/G5/omniauth-g5/pull/10
