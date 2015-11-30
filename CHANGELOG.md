@@ -1,3 +1,7 @@
+## v0.7.3 (2015-11-30)
+* Upgrade to devise_g5_authenticatable to fix regression bug https://github.com/G5/devise_g5_authenticatable/pull/23
+* Upgrade to omniauth_g5 to fix regression bug https://github.com/G5/omniauth-g5/pull/10
+
 ## v0.7.0 (2015-06-04)
 
 * Add convenience methods to `G5Authenticatable::User`, as well as a

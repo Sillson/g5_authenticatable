@@ -1,7 +1,7 @@
 # G5 Authenticatable
 
 G5 Authenticatable provides a default authentication solution for G5
-Rails applications. This gem configures and mounts 
+Rails applications. This gem configures and mounts
 [Devise](https://github.com/plataformatec/devise) with a default User
 model, using [OmniAuth](https://github.com/intridea/omniauth) to authenticate
 to the G5 Auth server. Helpers are also provided to secure your API methods.
@@ -18,7 +18,7 @@ library in isolation.
 
 ## Current Version
 
-0.7.0
+0.7.3
 
 ## Requirements
 
