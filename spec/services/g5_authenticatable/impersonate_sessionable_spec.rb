@@ -29,17 +29,6 @@ describe G5Authenticatable::ImpersonateSessionable do
     it { expect(impersonation_user).to eq(user) }
   end
 
-  describe '#clear_impersonation_keys' do
-    subject(:clear_impersonation_keys) { service_instance.send(:clear_impersonation_keys) }
-
-    before do
-      expect(service_instance).to receive(:clear_impersonated_admin_id).and_return(nil)
-      expect(service_instance).to receive(:clear_impersonating_user_uid).and_return(nil)
-    end
-
-    it { expect(clear_impersonation_keys).to be_nil }
-  end
-
   describe '#user_to_impersonate' do
     subject(:user_to_impersonate) { service_instance.send(:user_to_impersonate) }
 
