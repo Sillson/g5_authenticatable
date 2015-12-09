@@ -1,4 +1,4 @@
-## v0.7.4.beta (2015-12-03)
+## v0.7.4 (2015-12-09)
 
 * Adds Impersonate (Assume) Devise Strategy and Concern to handle access to session stored values
 * Handles the ability and rules to impersonate a user providing his unique ID
