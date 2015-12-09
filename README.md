@@ -18,7 +18,7 @@ library in isolation.
 
 ## Current Version
 
-0.7.3
+0.7.4
 
 ## Requirements
 
