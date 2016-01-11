@@ -1,4 +1,4 @@
-## v0.7.5 (2016-01-15)
+## v0.7.5.beta (2016-01-15)
 
 * Fixes bug that granted higher permissions when the resource for a scoped roles didn't exist.
 
