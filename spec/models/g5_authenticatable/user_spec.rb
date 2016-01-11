@@ -467,6 +467,22 @@ describe G5Authenticatable::User do
         expect{ user.update_roles_from_auth(auth_data) }.to change{ user.roles.length }.from(0).to(2)
       end
     end
+
+    context 'with an unexisting scoped role URL' do
+      let(:non_existing_urn) { 'some-non-existing-urn' }
+      before do
+        allow(mock_resource_class).to receive(:where).with(urn: non_existing_urn).and_return([])
+      end
+
+      let(:roles) { [
+        {name: 'viewer', type: 'MockResource', urn: non_existing_urn },
+      ] }
+
+      it 'will add a scoped role' do
+        expect{ user.update_roles_from_auth(auth_data) }.to_not change{ user.roles.length }
+      end
+    end
+
     context 'with 0 roles' do
       let(:roles) { [] }
 
