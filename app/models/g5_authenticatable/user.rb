@@ -7,6 +7,8 @@ module G5Authenticatable
     validates :email, presence: true, uniqueness: true
     validates_uniqueness_of :uid, scope: :provider
 
+    GLOBAL_ROLE = 'GLOBAL'
+
     def self.new_with_session(params, session)
       user = super(params, session)
       auth_data = session['omniauth.auth']
@@ -31,7 +33,7 @@ module G5Authenticatable
     def update_roles_from_auth(auth_data)
       roles.clear
       auth_data.extra.roles.each do |role|
-        role.type == 'GLOBAL' ? add_role(role.name) : add_scoped_role(role)
+        role.type == GLOBAL_ROLE ? add_role(role.name) : add_scoped_role(role)
       end
     end
 
@@ -55,7 +57,7 @@ module G5Authenticatable
     def add_scoped_role(role)
       the_class = Object.const_get(role.type)
       resource = the_class.where(urn: role.urn).first
-      add_role(role.name, resource)
+      add_role(role.name, resource) if resource.present?
     rescue => e
       Rails.logger.error(e)
     end

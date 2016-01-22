@@ -65,28 +65,26 @@ describe G5Authenticatable::User do
     let(:params) { Hash.new }
     let(:auth_data) do
       OmniAuth::AuthHash.new(
-        {
-          'provider' => new_user_attributes[:provider],
-          'info' => {
-            'email' => new_user_attributes[:email],
-            'name' => "#{new_user_attributes[:first_name]} #{new_user_attributes[:last_name]}",
-            'first_name' => new_user_attributes[:first_name],
-            'last_name' => new_user_attributes[:last_name],
-            'phone' => new_user_attributes[:phone_number]
-          },
-          'credentials' => {
-            'token' => new_user_attributes[:g5_access_token],
-            'expires' => true,
-            'expires_at' => Time.now + 1000
-          },
-          'extra' => {
-            'title' => new_user_attributes[:title],
-            'organization_name' => new_user_attributes[:organization_name],
-            'roles' => [
-              { 'name' => new_role_attributes[:name], 'type' => 'GLOBAL', 'urn' => nil }
-            ],
-            'raw_info' => {}
-          }
+        'provider' => new_user_attributes[:provider],
+        'info' => {
+          'email' => new_user_attributes[:email],
+          'name' => "#{new_user_attributes[:first_name]} #{new_user_attributes[:last_name]}",
+          'first_name' => new_user_attributes[:first_name],
+          'last_name' => new_user_attributes[:last_name],
+          'phone' => new_user_attributes[:phone_number]
+        },
+        'credentials' => {
+          'token' => new_user_attributes[:g5_access_token],
+          'expires' => true,
+          'expires_at' => Time.now + 1000
+        },
+        'extra' => {
+          'title' => new_user_attributes[:title],
+          'organization_name' => new_user_attributes[:organization_name],
+          'roles' => [
+            { 'name' => new_role_attributes[:name], 'type' => 'GLOBAL', 'urn' => nil }
+          ],
+          'raw_info' => {}
         })
     end
 
@@ -398,7 +396,6 @@ describe G5Authenticatable::User do
     let(:user_attributes2) { FactoryGirl.attributes_for(:g5_authenticatable_user) }
     let(:mock_urn) { 'mock_urn' }
 
-
     let(:mock_resource_class) { Class.new }
     before { stub_const('MockResource', mock_resource_class) }
 
@@ -409,48 +406,46 @@ describe G5Authenticatable::User do
 
     let(:auth_data) do
       OmniAuth::AuthHash.new(
-        {
-          'provider' => user_attributes[:provider],
-          'uid' => user_attributes[:uid],
-          'info' => {
-            'email' => user_attributes[:email],
-            'first_name' => user_attributes[:first_name],
-            'last_name' => user_attributes[:last_name],
-            'phone' => user_attributes[:phone_number]
-          },
-          'credentials' => {
-            'token' => user_attributes[:g5_access_token],
-            'expires' => true,
-            'expires_at' => Time.now + 1000
-          },
-          'extra' => {
-            'title' => user_attributes[:title],
-            'organization_name' => user_attributes[:organization_name],
-            'roles' => roles,
-            'raw_info' => {}
-          }
-        })
+        'provider' => user_attributes[:provider],
+        'uid' => user_attributes[:uid],
+        'info' => {
+          'email' => user_attributes[:email],
+          'first_name' => user_attributes[:first_name],
+          'last_name' => user_attributes[:last_name],
+          'phone' => user_attributes[:phone_number]
+        },
+        'credentials' => {
+          'token' => user_attributes[:g5_access_token],
+          'expires' => true,
+          'expires_at' => Time.now + 1000
+        },
+        'extra' => {
+          'title' => user_attributes[:title],
+          'organization_name' => user_attributes[:organization_name],
+          'roles' => roles,
+          'raw_info' => {}
+      })
     end
 
     context 'with global role' do
-      let(:roles) { [
-        {name: 'admin', type: 'GLOBAL', urn: nil}
-      ] }
+      let(:roles) do
+        [{ name: 'admin', type: 'GLOBAL', urn: nil }]
+      end
 
       it 'will add a global role' do
-        expect{ user.update_roles_from_auth(auth_data) }.to change{ user.roles.length }.from(0).to(1)
+        expect { user.update_roles_from_auth(auth_data) }.to change { user.roles.length }.from(0).to(1)
         expect(user.roles.first.name).to eq('admin')
         expect(user.roles.first.resource).to be_nil
       end
     end
 
     context 'with a scoped role' do
-      let(:roles) { [
-        {name: 'viewer', type: 'MockResource', urn: mock_urn}
-      ] }
+      let(:roles) do
+        [{ name: 'viewer', type: 'MockResource', urn: mock_urn }]
+      end
 
       it 'will add a scoped role' do
-        expect{ user.update_roles_from_auth(auth_data) }.to change{ user.roles.length }.from(0).to(1)
+        expect { user.update_roles_from_auth(auth_data) }.to change { user.roles.length }.from(0).to(1)
         expect(user.roles.first.name).to eq('viewer')
         expect(user.roles.first.resource_id).to eq(mock_resource.id)
         expect(user.roles.first.resource_type).to eq('MockResource')
@@ -458,31 +453,51 @@ describe G5Authenticatable::User do
     end
 
     context 'with a more than 1 role' do
-      let(:roles) { [
-        {name: 'viewer', type: 'MockResource', urn: mock_urn},
-        {name: 'admin', type: 'GLOBAL', urn: nil}
-      ] }
+      let(:roles) do
+        [
+          { name: 'viewer', type: 'MockResource', urn: mock_urn },
+          { name: 'admin', type: 'GLOBAL', urn: nil }
+        ]
+      end
 
       it 'will add a scoped role' do
-        expect{ user.update_roles_from_auth(auth_data) }.to change{ user.roles.length }.from(0).to(2)
+        expect { user.update_roles_from_auth(auth_data) }.to change { user.roles.length }.from(0).to(2)
       end
     end
+
+    context 'with an un-existing scoped role URL' do
+      let(:non_existing_urn) { 'some-non-existing-urn' }
+      before do
+        allow(mock_resource_class).to receive(:where).with(urn: non_existing_urn).and_return([])
+      end
+
+      let(:roles) do
+        [{ name: 'viewer', type: 'MockResource', urn: non_existing_urn }]
+      end
+
+      it 'will add a scoped role' do
+        expect { user.update_roles_from_auth(auth_data) }.to_not change { user.roles.length }
+      end
+    end
+
     context 'with 0 roles' do
       let(:roles) { [] }
 
       it 'will add a scoped role' do
-        expect{ user.update_roles_from_auth(auth_data) }.to_not change{ user.roles.length }.from(0)
+        expect { user.update_roles_from_auth(auth_data) }.to_not change { user.roles.length }.from(0)
       end
     end
 
     context 'with a bad role type' do
-      let(:roles) { [
-        {name: 'viewer', type: 'MockResource', urn: mock_urn},
-        {name: 'viewer', type: 'BadResource', urn: mock_urn}
-      ] }
+      let(:roles) do
+        [
+          { name: 'viewer', type: 'MockResource', urn: mock_urn },
+          { name: 'viewer', type: 'BadResource', urn: mock_urn }
+        ]
+      end
 
       it 'will skip the bad role' do
-        expect{ user.update_roles_from_auth(auth_data) }.to change{ user.roles.length }.from(0).to(1)
+        expect { user.update_roles_from_auth(auth_data) }.to change { user.roles.length }.from(0).to(1)
         expect(user.roles.first.name).to eq('viewer')
         expect(user.roles.first.resource_id).to eq(mock_resource.id)
         expect(user.roles.first.resource_type).to eq('MockResource')

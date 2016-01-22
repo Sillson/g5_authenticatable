@@ -1,3 +1,8 @@
+## v0.7.5.beta (2016-01-15)
+
+* Fixes bug that granted higher permissions when the resource for a scoped roles didn't exist.
+
+
 ## v0.7.4 (2015-12-09)
 
 * Adds Impersonate (Assume) Devise Strategy and Concern to handle access to session stored values
