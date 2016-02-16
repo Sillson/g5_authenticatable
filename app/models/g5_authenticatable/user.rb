@@ -38,7 +38,7 @@ module G5Authenticatable
     end
 
     def clients
-      G5Updatable::ClientPolicy::Scope.new(self, G5Updatable::Client).resolve
+      G5Updatable::ClientPolicy::Scope.new(self, G5Updatable::Client).clients_from_client_and_location_roles
     end
 
     private
