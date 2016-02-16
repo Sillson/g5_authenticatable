@@ -9,9 +9,13 @@ module G5Updatable
 
       def client_roles
         G5Authenticatable::Role
-          .joins('INNER JOIN g5_updatable_clients ON g5_updatable_clients.id = g5_authenticatable_roles.resource_id')
-          .joins('INNER JOIN g5_authenticatable_users_roles ON g5_authenticatable_roles.id = g5_authenticatable_users_roles.role_id')
-          .where('g5_authenticatable_roles.resource_type = ? and g5_authenticatable_users_roles.user_id = ?', G5Updatable::Client.name, user.id)
+          .joins('INNER JOIN g5_updatable_clients as c ON c.id = g5_authenticatable_roles.resource_id')
+          .joins('INNER JOIN g5_authenticatable_users_roles as ur ON g5_authenticatable_roles.id = ur.role_id')
+          .where('g5_authenticatable_roles.resource_type = ? and ur.user_id = ?', G5Updatable::Client.name, user.id)
+      end
+
+      def clients_from_client_and_location_roles
+        resolve | G5Updatable::LocationPolicy::Scope.new(user, G5Updatable::Location).clients_from_location_roles
       end
 
       def has_global_role?
