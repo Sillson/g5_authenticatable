@@ -41,6 +41,10 @@ module G5Authenticatable
       G5Updatable::ClientPolicy::Scope.new(self, G5Updatable::Client).clients_from_client_and_location_roles
     end
 
+    def locations
+      G5Updatable::LocationPolicy::Scope.new(self, G5Updatable::Location).resolve
+    end
+
     private
 
     def self.extended_auth_attributes(auth_data)
