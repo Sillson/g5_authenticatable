@@ -53,6 +53,10 @@ class G5Authenticatable::BasePolicy
         scope.none
       end
     end
+
+    def has_global_role?
+      G5Authenticatable::BasePolicy.new(user, G5Updatable::Client).has_global_role?
+    end
   end
 
   def super_admin?

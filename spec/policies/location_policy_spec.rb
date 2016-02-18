@@ -62,41 +62,4 @@ describe G5Updatable::LocationPolicy do
       end
     end
   end
-
-  describe '.clients_from_location_roles' do
-    subject { G5Updatable::LocationPolicy::Scope.new(user, G5Updatable::Location).clients_from_location_roles }
-
-    context 'with one role should get one client' do
-      before do
-        user.add_role(:admin, location_1)
-      end
-      it 'returns 1 client' do
-        expect(subject.length).to eq(1)
-        expect(subject).to include(client_1)
-      end
-    end
-
-    context 'with one role for two locations on the same client' do
-      before do
-        user.add_role(:admin, location_1)
-        user.add_role(:admin, location_2)
-      end
-      it 'returns 1 client' do
-        expect(subject.length).to eq(1)
-        expect(subject).to include(client_1)
-      end
-    end
-
-    context 'with one role for two locations on different clients' do
-      before do
-        user.add_role(:admin, location_1)
-        user.add_role(:admin, location_3)
-      end
-      it 'returns 2 clients' do
-        expect(subject.length).to eq(2)
-        expect(subject).to include(client_1)
-        expect(subject).to include(client_2)
-      end
-    end
-  end
 end
