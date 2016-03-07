@@ -1,22 +1,23 @@
+# Clients defined by this policy are ones for whom the user has access at the client level. This means that either
+# they have a global role or that have a specific client role.
 module G5Updatable
   class ClientPolicy < G5Authenticatable::BasePolicy
     class Scope < G5Authenticatable::BasePolicy::BaseScope
 
       def resolve
         return scope.all if has_global_role?
-        scope.where(id: client_roles.map(&:resource_id))
+        client_with_roles
       end
 
-      def client_roles
-        G5Authenticatable::Role
-          .joins('INNER JOIN g5_updatable_clients ON g5_updatable_clients.id = g5_authenticatable_roles.resource_id')
-          .joins('INNER JOIN g5_authenticatable_users_roles ON g5_authenticatable_roles.id = g5_authenticatable_users_roles.role_id')
-          .where('g5_authenticatable_roles.resource_type = ? and g5_authenticatable_users_roles.user_id = ?', G5Updatable::Client.name, user.id)
+      private
+
+      def client_with_roles
+        G5Updatable::Client
+          .joins('INNER JOIN g5_authenticatable_roles as r ON r.resource_id = g5_updatable_clients.id')
+          .joins('INNER JOIN g5_authenticatable_users_roles as ur ON r.id = ur.role_id')
+          .where('r.resource_type = ? and ur.user_id = ?', G5Updatable::Client.name, user.id)
       end
 
-      def has_global_role?
-        G5Authenticatable::BasePolicy.new(user, G5Updatable::Client).has_global_role?
-      end
     end
 
   end

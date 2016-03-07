@@ -37,8 +37,16 @@ module G5Authenticatable
       end
     end
 
+    def selectable_clients
+      G5Updatable::SelectableClientPolicy::Scope.new(self, G5Updatable::Client).resolve
+    end
+
     def clients
       G5Updatable::ClientPolicy::Scope.new(self, G5Updatable::Client).resolve
+    end
+
+    def locations
+      G5Updatable::LocationPolicy::Scope.new(self, G5Updatable::Location).resolve
     end
 
     private

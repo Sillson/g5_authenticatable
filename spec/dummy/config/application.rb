@@ -58,6 +58,8 @@ module Dummy
 
     config.paths.add "app/api", glob: "**/*.rb"
     config.autoload_paths += Dir["#{Rails.root}/app/api/*"]
+
+    config.web_console.development_only = false
   end
 end
 

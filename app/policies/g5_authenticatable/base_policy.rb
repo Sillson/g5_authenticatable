@@ -1,7 +1,7 @@
 class G5Authenticatable::BasePolicy
   attr_reader :user, :record
 
-  def initialize(user, record)
+  def initialize(user, record=nil)
     @user = user
     @record = record
   end
@@ -52,6 +52,10 @@ class G5Authenticatable::BasePolicy
       else
         scope.none
       end
+    end
+
+    def has_global_role?
+      G5Authenticatable::BasePolicy.new(user, G5Updatable::Client).has_global_role?
     end
   end
 
