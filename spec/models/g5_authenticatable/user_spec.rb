@@ -59,8 +59,8 @@ describe G5Authenticatable::User do
     expect(user.organization_name).to eq(user_attributes[:organization_name])
   end
 
-  describe '.auth_attributes' do
-    subject(:auth_attributes) { G5Authenticatable::User.auth_attributes(auth_data) }
+  describe '#attributes_from_auth' do
+    subject(:attributes_from_auth) { user.attributes_from_auth(auth_data) }
 
     let(:auth_data) do
       OmniAuth::AuthHash.new(
@@ -92,35 +92,35 @@ describe G5Authenticatable::User do
     let(:new_role_attributes) { FactoryGirl.attributes_for(:g5_authenticatable_role) }
 
     it 'has the correct uid' do
-      expect(auth_attributes[:uid]).to eq(new_user_attributes[:uid])
+      expect(attributes_from_auth[:uid]).to eq(new_user_attributes[:uid])
     end
 
     it 'has the correct provider' do
-      expect(auth_attributes[:provider]).to eq(new_user_attributes[:provider])
+      expect(attributes_from_auth[:provider]).to eq(new_user_attributes[:provider])
     end
 
     it 'has the correct first_name' do
-      expect(auth_attributes[:first_name]).to eq(new_user_attributes[:first_name])
+      expect(attributes_from_auth[:first_name]).to eq(new_user_attributes[:first_name])
     end
 
     it 'has the correct last_name' do
-      expect(auth_attributes[:last_name]).to eq(new_user_attributes[:last_name])
+      expect(attributes_from_auth[:last_name]).to eq(new_user_attributes[:last_name])
     end
 
     it 'has the correct email' do
-      expect(auth_attributes[:email]).to eq(new_user_attributes[:email])
+      expect(attributes_from_auth[:email]).to eq(new_user_attributes[:email])
     end
 
     it 'has the correct phone_number' do
-      expect(auth_attributes[:phone_number]).to eq(new_user_attributes[:phone_number])
+      expect(attributes_from_auth[:phone_number]).to eq(new_user_attributes[:phone_number])
     end
 
     it 'has the correct title' do
-      expect(auth_attributes[:title]).to eq(new_user_attributes[:title])
+      expect(attributes_from_auth[:title]).to eq(new_user_attributes[:title])
     end
 
     it 'has the correct organization_name' do
-      expect(auth_attributes[:organization_name]).to eq(new_user_attributes[:organization_name])
+      expect(attributes_from_auth[:organization_name]).to eq(new_user_attributes[:organization_name])
     end
   end
 

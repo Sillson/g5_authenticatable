@@ -9,7 +9,7 @@ module G5Authenticatable
 
     GLOBAL_ROLE = 'GLOBAL'
 
-    def self.auth_attributes(auth_data)
+    def attributes_from_auth(auth_data)
       super(auth_data).merge({
         first_name: auth_data.info.first_name,
         last_name: auth_data.info.last_name,
